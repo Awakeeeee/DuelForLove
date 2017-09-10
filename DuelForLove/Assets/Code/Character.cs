@@ -17,28 +17,40 @@ public class Character : MonoBehaviour
 		Idle,
 		Moving
 	}
-
+	[Header("Monitor")]
 	public PlayerSwitch playerSwitch;
 	public PlayerState CurrentState;
-	public float moveSpeed = 2;
-	public float rotateSpeed = 150;
+
+	[Header("Data")]
+	public CharacterData initialData;
+	private CharacterData defaultData;
+	public float moveSpeed;
+	public float rotateSpeed;
+
+	[Header("Permission")]
+	public bool movementPermission;
+	public bool rotationPermission;
 
 	[Header("Input")]
 	public string horizontalAxis;
 	public string verticalAxis;
 	public string skill_1_Axis, skill_2_Axis, skill_3_Axis, skill_4_Axis;
 
-	//hp is a large chunk of data, so separate it out
-	private CharacterHP hp;
-	public CharacterHP HP {get{return hp;}}
+	public CharacterHP HP;		//hp is a large chunk of data, so separate it out
+	public HeroBase hero;
 
 	void Awake()
 	{
-		hp = GetComponent<CharacterHP>();
+		Debug.Log("Character Awake!");
+
+		defaultData = Instantiate(initialData);
+		ResetAllCharacterData();
 	}
 
 	void Start()
 	{
+		Debug.Log("Character Start!");
+
 		horizontalAxis = "Horizontal" + playerSwitch.ToString();
 		verticalAxis = "Vertical" + playerSwitch.ToString();
 		skill_1_Axis = "Skill_1" + playerSwitch.ToString();
@@ -52,5 +64,35 @@ public class Character : MonoBehaviour
 	public void TransitState(PlayerState state)
 	{
 		CurrentState = state;
+	}
+
+	//character gameplay state change
+	public void ResetAllCharacterData()
+	{
+		HP.maxHP = defaultData.maxHP;
+		HP.maxMP = defaultData.maxMP;
+		HP.naturalHPRecover = defaultData.healthRecoverPerSec;
+		HP.naturalMPRecover = defaultData.enegyRecoverPerSec;
+
+		moveSpeed = defaultData.moveSpeed;
+		rotateSpeed = defaultData.rotateSpeed;
+
+		movementPermission = true;
+		rotationPermission = true;
+	}
+
+	public void SetMovementPermission(bool move = true, bool rotate = true)
+	{
+		movementPermission = move;
+		rotationPermission = rotate;
+	}
+
+	public void ChangeMoveSpeed(float percent)
+	{
+		moveSpeed = moveSpeed * percent;
+	}
+	public void ResetMoveSpeed()
+	{
+		moveSpeed = defaultData.moveSpeed;
 	}
 }

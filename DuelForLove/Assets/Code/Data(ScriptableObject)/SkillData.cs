@@ -15,11 +15,26 @@ public class SkillData : ScriptableObject
 
 	[Header("Limitation")]
 	public float cd;
+	public float hpCost;
 	public float enegyCost;
 
 	[Header("Game Effect")]
 	public float damage;
-	public float stunTime;
-	public float buffAmount;
-	public float debuffAmount;
+	public float duration;
+	public Buff[] buffs;
+	public Debuff[] debuffs;
+}
+
+[System.Serializable]
+public class Buff
+{
+	public float value;
+	public string info;
+}
+
+[System.Serializable]
+public class Debuff
+{
+	public float value;
+	public string info;
 }
