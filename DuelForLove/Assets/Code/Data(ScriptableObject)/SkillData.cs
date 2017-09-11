@@ -9,6 +9,7 @@ public class SkillData : ScriptableObject
 	[Header("Info")]
 	public int ID;
 	public string skillName;
+	public Sprite skillImage;
 	[Multiline]public string detailDescription;
 	public string oneLineDescription;
 	public string hero;

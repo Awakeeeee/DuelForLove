@@ -12,5 +12,6 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		Debug.Log("GameManager OnEnable!");
 
 		player_1p.HP.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
+		player_1p.hero.LinkUI(GUIManager.Instance.skills_1p);
 	}
 }

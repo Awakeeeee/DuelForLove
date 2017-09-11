@@ -52,6 +52,8 @@ public class HeroBase : MonoBehaviour
 	protected Character mc;
 	protected Animator anim;
 
+	protected SkillUIController skillsUI;
+
 	protected virtual void Awake()
 	{
 		Debug.Log("Hero base Awake!");
@@ -83,6 +85,13 @@ public class HeroBase : MonoBehaviour
 		timer3 = skill_3.cd;
 		timer4 = skill_4.cd;
 		InitAnimation();
+	}
+
+	public void LinkUI(SkillUIController suc)
+	{
+		skillsUI = suc;
+		SkillData[] data = new SkillData[]{skill_1, skill_2, skill_3, skill_4};
+		skillsUI.SetSkillUIContent(data);
 	}
 
 	protected virtual void Update()
@@ -156,6 +165,7 @@ public class HeroBase : MonoBehaviour
 		timer1 = 0.0f;
 		mc.HP.ConsumeEnegy(skill_1.enegyCost);
 		mc.hero.TriggerSkill(1);
+		skillsUI.SkillUIColdDown(1);
 		updating_s1 = true;
 	}
 	protected virtual void CastSkill_2()
@@ -163,6 +173,7 @@ public class HeroBase : MonoBehaviour
 		timer2 = 0.0f;
 		mc.HP.ConsumeEnegy(skill_2.enegyCost);
 		mc.hero.TriggerSkill(2);
+		skillsUI.SkillUIColdDown(2);
 		updating_s2 = true;
 	}
 	protected virtual void CastSkill_3()
@@ -170,6 +181,7 @@ public class HeroBase : MonoBehaviour
 		timer3 = 0.0f;
 		mc.HP.ConsumeEnegy(skill_3.enegyCost);
 		mc.hero.TriggerSkill(3);
+		skillsUI.SkillUIColdDown(3);
 		updating_s3 = true;
 	}
 	protected virtual void CastSkill_4()
