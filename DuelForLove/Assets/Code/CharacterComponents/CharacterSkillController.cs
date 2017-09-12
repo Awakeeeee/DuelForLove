@@ -34,10 +34,8 @@ public class CharacterSkillController : MonoBehaviour
 	public bool SkillIsAnimating {get {return aSkillIsAnimating;}}
 
 	private Character mc;
-	public Character MC {get {return mc;}}
 	private Animator anim;
 	private SkillUIController skillsUI;
-	public SkillUIController SkillsUI {get {return skillsUI;}}
 
 	protected virtual void Awake()
 	{
@@ -60,10 +58,10 @@ public class CharacterSkillController : MonoBehaviour
 		Debug.Log("Hero base Start!");
 		InitAnimation();
 
-		skill_1.sIndex = 1;
-		skill_2.sIndex = 2;
-		skill_3.sIndex = 3;
-		skill_4.sIndex = 4;
+		skill_1.Init(1, mc, this, skillsUI);
+		skill_2.Init(2, mc, this, skillsUI);
+		skill_3.Init(3, mc, this, skillsUI);
+		skill_4.Init(4, mc, this, skillsUI);
 	}
 
 	public void LinkUI(SkillUIController suc)

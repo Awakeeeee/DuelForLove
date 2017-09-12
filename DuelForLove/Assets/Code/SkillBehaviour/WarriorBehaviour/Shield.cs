@@ -11,14 +11,14 @@ public class Shield : SkillBehaviour
 		CommonOnPreCast();
 
 		CommonOnExitPreCastSuccessfully();
-		hero.MC.ChangeMoveSpeed(skillDataInstance.debuffs[0].value);
+		mc.ChangeMoveSpeed(skillDataInstance.debuffs[0].value);
 	}
 
 	protected override void Casting ()
 	{
 		castingTimer += Time.deltaTime;
 
-		if(castingTimer >= skillDataInstance.duration || Input.GetButtonUp(hero.MC.skill_2_Axis))	//TODO the axis..
+		if(castingTimer >= skillDataInstance.duration || Input.GetButtonUp(mc.skill_2_Axis))	//TODO the axis..
 		{
 			EndCast();	
 		}
@@ -29,7 +29,7 @@ public class Shield : SkillBehaviour
 		casting = false;
 		hero.BreakSkillAnim(this.sIndex);
 
-		hero.MC.ResetMoveSpeed();
+		mc.ResetMoveSpeed();
 		castingTimer = 0.0f;
 	}
 }

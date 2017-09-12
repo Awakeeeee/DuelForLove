@@ -11,7 +11,9 @@ public class GameManager : PersistentSingletonBase<GameManager>
 	{
 		Debug.Log("GameManager Start!");
 
-		player_1p.HP.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
-		player_1p.hero.LinkUI(GUIManager.Instance.skills_1p);
+		player_1p.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
+		player_1p.Csc.LinkUI(GUIManager.Instance.skills_1p);
+		player_2p.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
+		player_2p.Csc.LinkUI(GUIManager.Instance.skills_2p);
 	}
 }

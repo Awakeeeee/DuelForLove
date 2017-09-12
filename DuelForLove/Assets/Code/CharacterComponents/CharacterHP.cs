@@ -90,6 +90,18 @@ public class CharacterHP : HealthBase
 
 	public override void TakeDamage (float damage)
 	{
-		Debug.Log("ah!");
+		currentHP -= damage;
+		hpBarUI.UpdateHP(damage);
+
+		if(currentHP <= 0f)
+		{
+			currentHP = 0f;
+			Die();
+		}
+	}
+
+	void Die()
+	{
+		Debug.Log(this.gameObject.name + " dies.");
 	}
 }

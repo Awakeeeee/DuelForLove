@@ -16,11 +16,13 @@ public abstract class SkillBehaviour : MonoBehaviour
 	public float timer;
 	public bool casting;
 
+	//the character/hero this skill belongs to
+	protected Character mc;
 	protected CharacterSkillController hero;
+	protected SkillUIController ui;
 
-	protected void Awake()	//life time called once, which is at the start of scene
+	protected void Awake()
 	{
-		hero = GetComponent<CharacterSkillController>();
 		skillDataInstance = Instantiate(skillDataDefault);
 
 		casting = false;
@@ -34,6 +36,15 @@ public abstract class SkillBehaviour : MonoBehaviour
 		{
 			Casting();
 		}
+	}
+		
+	/// Initialization when the skill is set to a character/hero.
+	public void Init(int index, Character characterBelongTo, CharacterSkillController heroBelongTo, SkillUIController uiBelongTo)
+	{
+		sIndex = index;
+		mc = characterBelongTo;
+		hero = heroBelongTo;
+		ui = uiBelongTo;
 	}
 
 	//external link point
@@ -60,7 +71,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 			Debug.LogWarning(skillDataInstance.skillName + " is not ready yet!");
 			return false;
 		}
-		if(hero.MC.HP.CurrentMP < skillDataInstance.enegyCost)
+		if(mc.Chp.CurrentMP < skillDataInstance.enegyCost)
 		{
 			Debug.LogWarning(skillDataInstance.skillName + " not enough enegy!");
 			return false;
@@ -85,8 +96,8 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		timer = 0.0f;
 		casting = true;
-		hero.MC.HP.ConsumeEnegy(skillDataInstance.enegyCost);
-		hero.SkillsUI.SkillUIColdDown(sIndex);
+		mc.Chp.ConsumeEnegy(skillDataInstance.enegyCost);
+		ui.SkillUIColdDown(sIndex);
 	}
 	///Call this in PreCast() when a skill cast is good to use but being 's-ed'.
 	protected virtual void CommonOnExitPreCastFailed()

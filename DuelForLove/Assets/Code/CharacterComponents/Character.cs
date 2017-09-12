@@ -22,8 +22,8 @@ public class Character : MonoBehaviour
 	public PlayerState CurrentState;
 
 	[Header("Data")]
-	public CharacterData initialData;
-	private CharacterData defaultData;
+	public CharacterData dataDefault;
+	public CharacterData dataInstance;
 	public float moveSpeed;
 	public float rotateSpeed;
 
@@ -36,14 +36,32 @@ public class Character : MonoBehaviour
 	public string verticalAxis;
 	public string skill_1_Axis, skill_2_Axis, skill_3_Axis, skill_4_Axis;
 
-	public CharacterHP HP;		//hp is a large chunk of data, so separate it out
-	public CharacterSkillController hero;
+	private Rigidbody rb;
+	private CapsuleCollider cpc;
+	private AudioSource ads;
+	private CharacterHP chp;
+	private CharacterMovement cmm;
+	private CharacterSkillController csc;
+
+	public Rigidbody Rb {get {return rb;}}
+	public CapsuleCollider Cpc {get {return cpc;}}
+	public AudioSource Ads {get {return ads;}}
+	public CharacterHP Chp {get {return chp;}}
+	public CharacterMovement Cmm {get {return cmm;}}
+	public CharacterSkillController Csc {get {return csc;}}
 
 	void Awake()
 	{
 		Debug.Log("Character Awake!");
 
-		defaultData = Instantiate(initialData);
+		rb = GetComponent<Rigidbody>();
+		cpc = GetComponent<CapsuleCollider>();
+		ads = GetComponent<AudioSource>();
+		chp = GetComponent<CharacterHP>();
+		cmm = GetComponent<CharacterMovement>();
+		csc = GetComponentInChildren<CharacterSkillController>();
+
+		dataInstance = Instantiate(dataDefault);
 		ResetAllCharacterData();
 	}
 
@@ -69,13 +87,13 @@ public class Character : MonoBehaviour
 	//character gameplay state change
 	public void ResetAllCharacterData()
 	{
-		HP.maxHP = defaultData.maxHP;
-		HP.maxMP = defaultData.maxMP;
-		HP.naturalHPRecover = defaultData.healthRecoverPerSec;
-		HP.naturalMPRecover = defaultData.enegyRecoverPerSec;
+		Chp.maxHP = dataInstance.maxHP;
+		Chp.maxMP = dataInstance.maxMP;
+		Chp.naturalHPRecover = dataInstance.healthRecoverPerSec;
+		Chp.naturalMPRecover = dataInstance.enegyRecoverPerSec;
 
-		moveSpeed = defaultData.moveSpeed;
-		rotateSpeed = defaultData.rotateSpeed;
+		moveSpeed = dataInstance.moveSpeed;
+		rotateSpeed = dataInstance.rotateSpeed;
 
 		movementPermission = true;
 		rotationPermission = true;
@@ -93,6 +111,6 @@ public class Character : MonoBehaviour
 	}
 	public void ResetMoveSpeed()
 	{
-		moveSpeed = defaultData.moveSpeed;
+		moveSpeed = dataInstance.moveSpeed;
 	}
 }

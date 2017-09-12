@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GUIManager : SingletonBase<GUIManager>
 {
-	public ElaborateHPBar hpBar_1p;
-	public ElaborateHPBar enegyBar_1p;
-	public SkillUIController skills_1p;
+	public ElaborateHPBar hpBar_1p, hpBar_2p;
+	public ElaborateHPBar enegyBar_1p, enegyBar_2p;
+	public SkillUIController skills_1p, skills_2p;
 }

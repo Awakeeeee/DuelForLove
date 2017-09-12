@@ -11,7 +11,7 @@ public class Charge : SkillBehaviour
 		CommonOnPreCast();
 
 		CommonOnExitPreCastSuccessfully();
-		hero.MC.SetMovementPermission(false, false);
+		mc.SetMovementPermission(false, false);
 	}
 
 	protected override void Casting ()
@@ -19,7 +19,7 @@ public class Charge : SkillBehaviour
 		chargeTimer += Time.deltaTime;
 		if(chargeTimer < skillDataInstance.duration)
 		{
-			hero.MC.transform.position += hero.MC.transform.forward * skillDataInstance.buffs[0].value * Time.deltaTime;
+			mc.transform.position += mc.transform.forward * skillDataInstance.buffs[0].value * Time.deltaTime;
 		}else
 		{
 			EndCast();
@@ -32,6 +32,6 @@ public class Charge : SkillBehaviour
 		hero.BreakSkillAnim(this.sIndex);
 
 		chargeTimer = 0.0f;
-		hero.MC.SetMovementPermission(true, true);
+		mc.SetMovementPermission(true, true);
 	}
 }

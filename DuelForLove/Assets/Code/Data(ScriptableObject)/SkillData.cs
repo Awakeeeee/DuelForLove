@@ -23,7 +23,10 @@ public class SkillData : ScriptableObject
 
 	[Header("Game Effect")]
 	public float damage;
+	public float knockForce;		//Note: let knock force larger than move speed in number. Use knock back resist on Character data to compromise. This is for knocking back while moving effect.
 	public float duration;
+	public float range;
+	public LayerMask targetLayer;
 	public Buff[] buffs;
 	public Debuff[] debuffs;
 }
