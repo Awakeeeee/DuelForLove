@@ -61,3 +61,35 @@ D:\GitHub Repos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.VR.xml
 D:\GitHub Repos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 D:\GitHub Repos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp.dll
 D:\GitHub Repos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp.pdb
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Assembly-CSharp.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Assembly-CSharp.pdb
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Facebook.Unity.Settings.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\nunit.framework.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEditor.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.Analytics.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.HoloLens.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.Networking.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.TestRunner.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.UI.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.VR.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Mono.Cecil.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Unity.SerializationLogic.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Unity.DataContract.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Unity.UNetWeaver.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Unity.CecilTools.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Mono.Cecil.Pdb.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\Mono.Cecil.Mdb.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEditor.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.UI.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.Networking.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.TestRunner.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\nunit.framework.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.Analytics.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.HoloLens.xml
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEngine.VR.xml
+E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp.dll
+E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp.pdb

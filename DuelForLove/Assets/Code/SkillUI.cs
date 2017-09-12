@@ -10,8 +10,11 @@ public class SkillUI : MonoBehaviour
 
 	[Header("UI Components")]
 	public Image baseImage;
+	public CanvasGroup cdGroup;
 	public Image cdCoverImage;
+	public Text cdText;
 	public Text nameText;
+	public Text mpText;
 
 	[Header("Anim Numbers")]
 	public float endScale;
@@ -28,7 +31,17 @@ public class SkillUI : MonoBehaviour
 	{
 		if(skillData.skillImage)
 			baseImage.sprite = skillData.skillImage;
+		
 		nameText.text = skillData.skillName;
+
+		if(skillData.enegyCost <= 0)
+		{
+			mpText.text = "";
+		}else
+		{
+			mpText.text = skillData.enegyCost.ToString();
+		}
+
 		isCounting = false;
 	}
 
@@ -52,18 +65,23 @@ public class SkillUI : MonoBehaviour
 	IEnumerator CountCo()
 	{
 		isCounting = true;
+		cdGroup.alpha = 1;
+		cdText.text = "";
 		cdCoverImage.fillAmount = 1f;
 
 		float timer = 0f;
 		while(timer < skillData.cd)
 		{
 			cdCoverImage.fillAmount = (skillData.cd - timer) / skillData.cd;
+			cdText.text = (skillData.cd - timer).ToString("F1");
 			
 			timer += Time.deltaTime;
 			yield return null;
 		}
 
+		cdText.text = "";
 		cdCoverImage.fillAmount = 0f;
+		cdGroup.alpha = 0;
 		isCounting = false;
 		yield return StartCoroutine(CountEndAnim());
 	}

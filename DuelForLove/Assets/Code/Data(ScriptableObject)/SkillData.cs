@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 ///For now I attemp to list all possition infomation of a skill, let's see if I need to make gategories later
+/// 
+///Should I save common data in thisScriptableObject, and save specific data in skill Monobehaviour?
 [CreateAssetMenu(fileName = "New Skill", menuName = "New Skill")]
 public class SkillData : ScriptableObject
 {

@@ -7,9 +7,9 @@ public class GameManager : PersistentSingletonBase<GameManager>
 	public Character player_1p;
 	public Character player_2p;
 
-	void OnEnable()
+	void Start()
 	{
-		Debug.Log("GameManager OnEnable!");
+		Debug.Log("GameManager Start!");
 
 		player_1p.HP.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
 		player_1p.hero.LinkUI(GUIManager.Instance.skills_1p);

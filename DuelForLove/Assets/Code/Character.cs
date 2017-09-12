@@ -37,7 +37,7 @@ public class Character : MonoBehaviour
 	public string skill_1_Axis, skill_2_Axis, skill_3_Axis, skill_4_Axis;
 
 	public CharacterHP HP;		//hp is a large chunk of data, so separate it out
-	public HeroBase hero;
+	public CharacterSkillController hero;
 
 	void Awake()
 	{
