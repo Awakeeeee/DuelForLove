@@ -10,14 +10,34 @@ public class Charge : SkillBehaviour
 	{
 		CommonOnPreCast();
 
-		CommonOnExitPreCastSuccessfully();
+		CommonOnCastSuccessfully();
+		if(skillDataInstance.castEffect)
+			Instantiate(skillDataInstance.castEffect, mc.transform.position, Quaternion.identity);
 		mc.SetMovementPermission(false, false);
 	}
 
 	protected override void Casting ()
 	{
 		chargeTimer += Time.deltaTime;
-		if(chargeTimer < skillDataInstance.duration)
+
+		Ray ray = new Ray(mc.transform.position, mc.transform.forward);
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit, skillDataInstance.range, skillDataInstance.targetLayer, QueryTriggerInteraction.Ignore))
+		{
+			PlayRandomSkillAudio(skillDataInstance.hitClips);
+			if(skillDataInstance.hitEffect)
+				Instantiate(skillDataInstance.hitEffect, hit.point, Quaternion.LookRotation(mc.transform.forward));
+
+			Character cc = hit.transform.GetComponent<Character>();
+			if(cc)
+			{
+				cc.Chp.TakeDamage(skillDataInstance.damage);
+				cc.Stunned(skillDataInstance.effectDuration);
+				cc.Cmm.TriggerShake();
+			}
+		}
+
+		if(chargeTimer < skillDataInstance.skillDuration && hit.transform == null)
 		{
 			mc.transform.position += mc.transform.forward * skillDataInstance.buffs[0].value * Time.deltaTime;
 		}else
@@ -28,9 +48,9 @@ public class Charge : SkillBehaviour
 
 	protected override void EndCast ()
 	{
-		casting = false;
-		hero.BreakSkillAnim(this.sIndex);
+		CommonOnEndCast();
 
+		hero.BreakSkillAnim(this.sIndex);
 		chargeTimer = 0.0f;
 		mc.SetMovementPermission(true, true);
 	}

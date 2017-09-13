@@ -17,6 +17,11 @@ public class CharacterMovement : MonoBehaviour
 	public LayerMask collideLayer;
 	public float collidingMovementPercent = 0f;
 
+	[Header("Shake")]
+	private float shakeAmount;
+	private float shakeTime;
+	private float shakeFactor;
+
 	private bool forceMove;
 	private float externalForceAmount;
 	private Vector3 externalForceDir;
@@ -42,6 +47,7 @@ public class CharacterMovement : MonoBehaviour
 	void Update()
 	{
 		CastSurroundingRays();
+		Shake();
 
 		Rotate();
 		Move();
@@ -54,10 +60,18 @@ public class CharacterMovement : MonoBehaviour
 	{
 		for(int i = 0; i < rayNumber; i++)
 		{
-			//Debug.DrawRay(transform.position, AngleToRayDir(i * intervalAngle) * radius, Color.red);
+			Debug.DrawRay(transform.position, AngleToRayDir(i * intervalAngle) * radius, Color.red);
 			if(Physics.Raycast(transform.position, AngleToRayDir(i * intervalAngle), radius, collideLayer, QueryTriggerInteraction.Ignore))
 			{
+				//stop
 				collidingMultiplier = collidingMovementPercent;
+				//get out of trap state
+				if((!Physics.Raycast(transform.position, transform.forward, radius, collideLayer, QueryTriggerInteraction.Ignore) && Input.GetAxisRaw("Vertical") > 0f)
+					||(!Physics.Raycast(transform.position, -transform.forward, radius, collideLayer, QueryTriggerInteraction.Ignore) && Input.GetAxisRaw("Vertical") < 0f))
+				{
+					collidingMultiplier = 1f;
+				}
+
 				return;
 			}
 		}
@@ -125,5 +139,30 @@ public class CharacterMovement : MonoBehaviour
 		forceMove = true;
 		externalForceAmount = forceAmount;
 		externalForceDir = forceDir;
+	}
+		
+	public void TriggerShake(float amount = 0.1f, float time = 0.2f, float factor = 1)
+	{
+		shakeAmount = amount;
+		shakeTime = time;
+		shakeFactor = factor;
+
+		StartCoroutine(Shake());
+	}
+	IEnumerator Shake()
+	{
+		Vector3 originalPos = transform.position;
+		float shakeTimer = 0.0f;
+		float amount = Mathf.Lerp(shakeAmount, 0f, shakeTimer / shakeTime);
+
+		while(shakeTimer < shakeTime)
+		{
+			Vector3 shakeVec = Random.insideUnitSphere * amount;
+			transform.position = new Vector3(originalPos.x + shakeVec.x, originalPos.y, originalPos.z + shakeVec.z);
+			shakeTimer += Time.deltaTime * shakeFactor;
+			yield return null;
+		}
+		transform.position = originalPos;
+		shakeTimer = 0.0f;
 	}
 }

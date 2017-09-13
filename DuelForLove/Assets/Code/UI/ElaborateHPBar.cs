@@ -23,6 +23,8 @@ public class ElaborateHPBar : MonoBehaviour
 	public Image hurtground;
 	public CanvasGroup textGroup;
 	public Text hpText;
+	public bool showRecoverText;
+	public Text recoverText;
 
 	[Header("Damage text jump out(For Wpos HP bar)")]
 	public Text jumpOutText;
@@ -40,12 +42,14 @@ public class ElaborateHPBar : MonoBehaviour
 		//ResetBar(100, 1f);
 	}
 
-	public void ResetBar(float _maxHp, float startHealthPercent)
+	public void ResetBar(float _maxHp, float startHealthPercent, float recoverAmount = 0.0f)
 	{
 		maxHp = _maxHp;
 
 		startHealthPercent = Mathf.Clamp(startHealthPercent, 0f, 1f);
 		currentHp = maxHp * startHealthPercent;
+
+		SetHpRecoverAmount(recoverAmount);
 
 		hpPivot = startHealthPercent;
 		foreground.fillAmount = hpPivot;
@@ -64,13 +68,13 @@ public class ElaborateHPBar : MonoBehaviour
 	void Update()
 	{
 		//TEST
-		if(Input.GetKeyDown(KeyCode.T))
-		{
-			UpdateHP(10f);
-		}
+//		if(Input.GetKeyDown(KeyCode.T))
+//		{
+//			UpdateTakeDamageHP(10f);
+//		}
 	}
 
-	public void UpdateHP(float reduce)
+	public void UpdateTakeDamageHP(float reduce)
 	{	
 		if(jumpOutText != null && currentHp > 0f)
 		{
@@ -89,6 +93,22 @@ public class ElaborateHPBar : MonoBehaviour
 		}
 
 		StartCoroutine(HurtBarShrunkCo());		//hurt ground bar shrunk gradually and follows fore ground bar
+	}
+	public void UpdateRecoverHP(float add)
+	{
+		currentHp += add;
+		currentHp = Mathf.Clamp(currentHp, 0f, maxHp);
+		hpPivot = currentHp / maxHp;
+		foreground.fillAmount = hpPivot;
+		background.fillAmount = hpPivot;
+		if(showText)
+		{
+			UpdateText(currentHp);
+		}
+	}
+	public void SetHpRecoverAmount(float amount)
+	{
+		recoverText.text = "+" + amount.ToString("F1");
 	}
 
 	IEnumerator HurtBarShrunkCo()

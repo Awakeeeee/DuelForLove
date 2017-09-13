@@ -169,3 +169,4 @@ E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xc
 E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.dll
 E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.pdb
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\JMOAssets.dll

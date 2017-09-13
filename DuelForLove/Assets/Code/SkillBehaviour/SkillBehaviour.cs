@@ -10,7 +10,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 	[Header("Data")]
 	public int sIndex;
 	public SkillData skillDataDefault;
-	public SkillData skillDataInstance;
+	[HideInInspector]public SkillData skillDataInstance;
 
 	[Header("Process Mornitor")]
 	public float timer;
@@ -68,12 +68,12 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		if(timer < skillDataInstance.cd)
 		{
-			Debug.LogWarning(skillDataInstance.skillName + " is not ready yet!");
+			Debug.LogWarning(mc.playerSwitch.ToString() + " " + skillDataInstance.skillName + " is not ready yet!");
 			return false;
 		}
 		if(mc.Chp.CurrentMP < skillDataInstance.enegyCost)
 		{
-			Debug.LogWarning(skillDataInstance.skillName + " not enough enegy!");
+			Debug.LogWarning(mc.playerSwitch.ToString() + " " + skillDataInstance.skillName + " not enough enegy!");
 			return false;
 		}
 		if(casting)
@@ -91,16 +91,17 @@ public abstract class SkillBehaviour : MonoBehaviour
 	//Most time no need to override this two, override it only when a skill is special(for example, the skill cost HP instead of MP)
 
 	///Call this in PreCast() when a skill cast is ready.
-	///Including flag reset, consumpetion, UI change.
-	protected virtual void CommonOnExitPreCastSuccessfully()
+	///Including flag reset, consumpetion, UI change, start SFX.
+	protected virtual void CommonOnCastSuccessfully()
 	{
 		timer = 0.0f;
 		casting = true;
 		mc.Chp.ConsumeEnegy(skillDataInstance.enegyCost);
 		ui.SkillUIColdDown(sIndex);
+		PlayRandomSkillAudio(skillDataInstance.castClips);
 	}
 	///Call this in PreCast() when a skill cast is good to use but being 's-ed'.
-	protected virtual void CommonOnExitPreCastFailed()
+	protected virtual void CommonOnCastFailed()
 	{
 		casting = false;
 	}
@@ -110,8 +111,30 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		hero.TriggerSkillAnim(sIndex);
 	}
+	protected virtual void CommonOnEndCast()
+	{
+		casting = false;
+		PlayRandomSkillAudio(skillDataInstance.endClips);
+	}
 
 	protected abstract void PreCast(); //do preparation, if preparation successfully finishes, cost resources and starts casting
 	protected abstract void Casting(); //casting behavioour, and check for end cast
 	protected abstract void EndCast();
+
+	protected AudioClip GetRandomSkillAudio(AudioClip[] audioGroup)
+	{
+		if(audioGroup == null || audioGroup.Length <= 0)
+			return null;
+
+		int ran = Random.Range(0, audioGroup.Length);
+		return audioGroup[ran];
+	}
+	protected void PlayRandomSkillAudio(params AudioClip[] audios)
+	{
+		AudioClip ac = GetRandomSkillAudio(audios);
+		if(ac)
+		{
+			mc.Ads.PlayOneShot(ac);
+		}
+	}
 }

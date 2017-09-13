@@ -8,6 +8,8 @@ public class Map : MonoBehaviour
 	public int height = 3;
 	public float scale = 1;
 	public GameObject tile;
+	public bool createSurroundingWalls;
+	public GameObject wallTile;
 
 	public Vector3[,] grid;
 
@@ -27,7 +29,19 @@ public class Map : MonoBehaviour
 			{
 				Vector3 tilePos = new Vector3(-width/2f + 0.5f + x, 0f, -height/2f + 0.5f + y) * scale;
 				grid[x, y] = tilePos;
-				GameObject newTile = Instantiate(tile, this.transform);
+				GameObject newTile;
+				if(createSurroundingWalls && (x == 0 || y == 0 || x == width - 1 || y == height - 1))
+				{
+					newTile = Instantiate(wallTile, this.transform);
+					BoxCollider bx = newTile.AddComponent<BoxCollider>();
+					//because the tile is quad, and rotated 90 degress in X axis
+					bx.center = new Vector3(0f, 0f, -1f) * scale;
+					bx.size = new Vector3(1, 1f, 2) * scale;
+					bx.gameObject.layer = LayerMask.NameToLayer("Block");
+				}else
+				{
+					newTile = Instantiate(tile, this.transform);
+				}
 				newTile.transform.position = tilePos;
 				newTile.transform.localScale *= scale;
 			}

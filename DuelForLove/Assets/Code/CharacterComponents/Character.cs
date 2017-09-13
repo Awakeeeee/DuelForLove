@@ -30,6 +30,7 @@ public class Character : MonoBehaviour
 	[Header("Permission")]
 	public bool movementPermission;
 	public bool rotationPermission;
+	public bool actionPermission;
 
 	[Header("Input")]
 	public string horizontalAxis;
@@ -97,20 +98,45 @@ public class Character : MonoBehaviour
 
 		movementPermission = true;
 		rotationPermission = true;
+		actionPermission = true;
 	}
 
-	public void SetMovementPermission(bool move = true, bool rotate = true)
+	public void SetMovementPermission(bool move = true, bool rotate = true)	//trapped
 	{
 		movementPermission = move;
 		rotationPermission = rotate;
+	}
+	public void SetActionPermission(bool action = true)	//silent
+	{
+		actionPermission = action;
 	}
 
 	public void ChangeMoveSpeed(float percent)
 	{
 		moveSpeed = moveSpeed * percent;
 	}
+
 	public void ResetMoveSpeed()
 	{
 		moveSpeed = dataInstance.moveSpeed;
+	}
+
+	public void Stunned(float duration)
+	{
+		StopAllCoroutines();
+		StartCoroutine(StunnedCo(duration));
+	}
+	IEnumerator StunnedCo(float duration)
+	{
+		SetMovementPermission(false, false);
+		SetActionPermission(false);
+		float timer = 0;
+		while(timer < duration)
+		{
+			timer += Time.deltaTime;
+			yield return null;
+		}
+		SetMovementPermission(true, true);
+		SetActionPermission(true);
 	}
 }

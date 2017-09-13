@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CharacterHP : HealthBase
 {
-	[Header("Enegy")]
 	public float maxMP;
 	private float currentMP;
 	public float CurrentMP {get{return currentMP;}}
@@ -17,6 +16,13 @@ public class CharacterHP : HealthBase
 	private ElaborateHPBar hpBarUI;
 	private ElaborateHPBar enegyBarUI;
 
+	Character mc;
+
+	void Awake()
+	{
+		mc = GetComponent<Character>();
+	}
+
 	protected override void Start ()
 	{
 		Debug.Log("HP compo Start!");
@@ -25,9 +31,9 @@ public class CharacterHP : HealthBase
 		currentMP = maxMP;
 
 		if(hpBarUI)
-			hpBarUI.ResetBar(maxHP, 1f);
+			hpBarUI.ResetBar(maxHP, 1f, mc.dataInstance.healthRecoverPerSec);
 		if(enegyBarUI)
-			enegyBarUI.ResetBar(maxMP, 1f);
+			enegyBarUI.ResetBar(maxMP, 1f, mc.dataInstance.enegyRecoverPerSec);
 	}
 
 	void Update()
@@ -49,7 +55,7 @@ public class CharacterHP : HealthBase
 			currentMP += 1f;
 			if(enegyBarUI)
 			{
-				enegyBarUI.UpdateHP(-1f);
+				enegyBarUI.UpdateRecoverHP(1f);
 			}
 		}
 	}
@@ -66,7 +72,7 @@ public class CharacterHP : HealthBase
 			currentHP += 1f;
 			if(hpBarUI)
 			{
-				hpBarUI.UpdateHP(-1f);
+				hpBarUI.UpdateRecoverHP(1f);
 			}
 		}
 	}
@@ -76,7 +82,7 @@ public class CharacterHP : HealthBase
 		currentMP -= amount;
 		if(enegyBarUI)
 		{
-			enegyBarUI.UpdateHP(amount);
+			enegyBarUI.UpdateTakeDamageHP(amount);
 		}
 	}
 
@@ -91,7 +97,7 @@ public class CharacterHP : HealthBase
 	public override void TakeDamage (float damage)
 	{
 		currentHP -= damage;
-		hpBarUI.UpdateHP(damage);
+		hpBarUI.UpdateTakeDamageHP(damage);
 
 		if(currentHP <= 0f)
 		{

@@ -73,6 +73,9 @@ public class CharacterSkillController : MonoBehaviour
 
 	protected virtual void Update()
 	{
+		if(!mc.actionPermission)
+			return;
+		
 		if(Input.GetButtonDown(mc.skill_1_Axis))
 		{
 			skill_1.Cast();

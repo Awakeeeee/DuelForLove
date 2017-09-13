@@ -8,7 +8,7 @@ public class Blade : SkillBehaviour
 	{
 		CommonOnPreCast();
 
-		CommonOnExitPreCastSuccessfully();	//there is no if statement to call Fail Cast, meaning this skill cannot be s-ed
+		CommonOnCastSuccessfully();	//there is no if statement to call Fail Cast, meaning this skill cannot be s-ed
 	}
 
 	protected override void Casting ()
@@ -20,7 +20,7 @@ public class Blade : SkillBehaviour
 
 	protected override void EndCast ()
 	{
-		casting = false;
+		CommonOnEndCast();
 	}
 
 	//animation event
@@ -31,11 +31,13 @@ public class Blade : SkillBehaviour
 		//Debug.DrawRay(ray.origin, ray.direction * skillDataInstance.range, Color.red, 1f);
 		if(Physics.Raycast(ray, out hit, skillDataInstance.range, skillDataInstance.targetLayer))
 		{
+			PlayRandomSkillAudio(skillDataInstance.hitClips);
 			HealthBase hpObj = hit.transform.GetComponent<HealthBase>();
 			Character cc = hit.transform.GetComponent<Character>();
 			if(hpObj)
 			{
 				hpObj.TakeDamage(skillDataInstance.damage);	//could be another chatacter or block
+				Instantiate(skillDataInstance.hitEffect, hit.point, Quaternion.LookRotation(mc.transform.forward));
 			}
 
 			if(cc)

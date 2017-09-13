@@ -15,5 +15,5 @@ public class CharacterData : ScriptableObject
 	public float healthRecoverPerSec;
 	public float enegyRecoverPerSec;
 
-	public float knockBackResist;
+	public float knockBackResist = 150f;
 }
