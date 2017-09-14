@@ -33,6 +33,7 @@ public class SkillUI : MonoBehaviour
 			baseImage.sprite = skillData.skillImage;
 		
 		nameText.text = skillData.skillName;
+		baseImage.sprite = skillData.skillImage;
 
 		if(skillData.enegyCost <= 0)
 		{
