@@ -24,7 +24,7 @@ public class RageBurst : SkillBehaviour
 	public void RageBurstHitGround()
 	{
 		PlayRandomSkillAudio(skillDataInstance.hitClips);
-		Instantiate(skillDataInstance.hitEffect, mc.transform.position, Quaternion.identity);
+		ShowHitEffect(mc.transform.position, Quaternion.identity);
 
 		mc.Cmm.TriggerShake();
 

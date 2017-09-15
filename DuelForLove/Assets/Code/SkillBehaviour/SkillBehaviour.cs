@@ -21,12 +21,17 @@ public abstract class SkillBehaviour : MonoBehaviour
 	protected CharacterSkillController hero;
 	protected SkillUIController ui;
 
+	protected GameObject castEffectInstance;
+	protected GameObject[] pathEffectInstance = new GameObject[10];	//TODO the magic number
+	protected GameObject hitEffectInstance;
+
 	protected void Awake()
 	{
 		skillDataInstance = Instantiate(skillDataDefault);
 
 		casting = false;
 		timer = skillDataInstance.cd;
+		PreloadEffects();
 	}
 
 	protected void Update()
@@ -103,6 +108,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 	///Call this in PreCast() when a skill cast is good to use but being 's-ed'.
 	protected virtual void CommonOnCastFailed()
 	{
+		mc.Csc.BreakSkillAnim(sIndex);
 		casting = false;
 	}
 	///Call this when enter PreCast().
@@ -111,6 +117,25 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		hero.TriggerSkillAnim(sIndex);
 	}
+		
+	///On pre-cast you can 's' the skill to determine fail on success
+	protected virtual IEnumerator PreCastCo()
+	{
+		float timer = 0.0f;
+		while(timer < skillDataInstance.preCastTime)
+		{
+			if(Input.GetButtonDown(mc.skill_break))	//worked!!!!!!!!
+			{
+				CommonOnCastFailed();
+				yield break;
+			}
+
+			timer += Time.deltaTime;
+			yield return null;
+		}
+		CommonOnCastSuccessfully();
+	}
+
 	protected virtual void CommonOnEndCast()
 	{
 		casting = false;
@@ -129,12 +154,69 @@ public abstract class SkillBehaviour : MonoBehaviour
 		int ran = Random.Range(0, audioGroup.Length);
 		return audioGroup[ran];
 	}
-	protected void PlayRandomSkillAudio(params AudioClip[] audios)
+	public void PlayRandomSkillAudio(params AudioClip[] audios)
 	{
 		AudioClip ac = GetRandomSkillAudio(audios);
 		if(ac)
 		{
 			mc.Ads.PlayOneShot(ac);
 		}
+	}
+
+	//optimization
+	void PreloadEffects()
+	{
+		if(skillDataInstance.castEffect)
+		{
+			castEffectInstance = Instantiate(skillDataInstance.castEffect);
+			castEffectInstance.SetActive(false);
+		}
+		if(skillDataInstance.pathEffect)
+		{
+			for(int i = 0; i < pathEffectInstance.Length; i++)
+			{
+				pathEffectInstance[i] = Instantiate(skillDataInstance.pathEffect) as GameObject;
+				pathEffectInstance[i].SetActive(false);
+			}
+		}
+		if(skillDataInstance.hitEffect)
+		{
+			hitEffectInstance = Instantiate(skillDataInstance.hitEffect);
+			hitEffectInstance.SetActive(false);
+		}
+	}
+
+	public void ShowCastEffect(Vector3 wpos, Quaternion rot)
+	{
+		if(castEffectInstance)
+		{
+			castEffectInstance.transform.position = wpos;
+			castEffectInstance.transform.rotation = rot;
+			castEffectInstance.SetActive(true);
+		}
+	}
+	public void ShowHitEffect(Vector3 wpos, Quaternion rot)
+	{
+		if(hitEffectInstance)
+		{
+			hitEffectInstance.transform.position = wpos;
+			hitEffectInstance.transform.rotation = rot;
+			hitEffectInstance.SetActive(true);
+		}
+	}
+	public GameObject ShowPathEffect(Vector3 wpos, Quaternion rot)
+	{
+		for(int i = 0; i < pathEffectInstance.Length; i++)
+		{
+			if(!pathEffectInstance[i].activeInHierarchy)
+			{
+				pathEffectInstance[i].transform.position = wpos;
+				pathEffectInstance[i].transform.rotation = rot;
+				pathEffectInstance[i].SetActive(true);
+				return pathEffectInstance[i];
+			}
+		}
+
+		return null;
 	}
 }

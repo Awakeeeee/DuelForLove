@@ -18,6 +18,8 @@ public class SkillData : ScriptableObject
 
 	[Header("Limitation")]
 	public float cd;
+	[Tooltip("With the time, you can 's' the skill")]
+	public float preCastTime;
 	public float hpCost;
 	public float enegyCost;
 
@@ -26,6 +28,8 @@ public class SkillData : ScriptableObject
 	public float knockForce = 20f;	//Note: let knock force larger than move speed in number. Use knock back resist in Character data to compromise. This is for knocking back while moving effect.
 	public float skillDuration;
 	public float effectDuration;
+	[Tooltip("If the skill shoot a bullet, this is the bullet speed")]
+	public float bulletSpeed;
 	public float range;
 	public LayerMask targetLayer;
 	public Buff[] buffs;

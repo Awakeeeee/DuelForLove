@@ -37,7 +37,7 @@ public class Blade : SkillBehaviour
 			if(hpObj)
 			{
 				hpObj.TakeDamage(skillDataInstance.damage);	//could be another chatacter or block
-				Instantiate(skillDataInstance.hitEffect, hit.point, Quaternion.LookRotation(mc.transform.forward));
+				ShowHitEffect(hit.transform.position, Quaternion.LookRotation(mc.transform.forward));
 			}
 
 			if(cc)

@@ -36,6 +36,7 @@ public class Character : MonoBehaviour
 	public string horizontalAxis;
 	public string verticalAxis;
 	public string skill_1_Axis, skill_2_Axis, skill_3_Axis, skill_4_Axis;
+	public string skill_break;
 
 	private Rigidbody rb;
 	private CapsuleCollider cpc;
@@ -76,6 +77,7 @@ public class Character : MonoBehaviour
 		skill_2_Axis = "Skill_2" + playerSwitch.ToString();
 		skill_3_Axis = "Skill_3" + playerSwitch.ToString();
 		skill_4_Axis = "Skill_4" + playerSwitch.ToString();
+		skill_break = "Skill_Break" + playerSwitch.ToString();
 
 		CurrentState = PlayerState.Idle;
 	}

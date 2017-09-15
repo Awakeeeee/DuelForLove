@@ -11,8 +11,7 @@ public class Charge : SkillBehaviour
 		CommonOnPreCast();
 
 		CommonOnCastSuccessfully();
-		if(skillDataInstance.castEffect)
-			Instantiate(skillDataInstance.castEffect, mc.transform.position, Quaternion.identity);
+		ShowCastEffect(mc.transform.position, Quaternion.identity);
 		mc.SetMovementPermission(false, false);
 	}
 
@@ -25,8 +24,7 @@ public class Charge : SkillBehaviour
 		if(Physics.Raycast(ray, out hit, skillDataInstance.range, skillDataInstance.targetLayer, QueryTriggerInteraction.Ignore))
 		{
 			PlayRandomSkillAudio(skillDataInstance.hitClips);
-			if(skillDataInstance.hitEffect)
-				Instantiate(skillDataInstance.hitEffect, hit.point, Quaternion.LookRotation(mc.transform.forward));
+			ShowHitEffect(hit.transform.position, Quaternion.LookRotation(mc.transform.forward));
 
 			Character cc = hit.transform.GetComponent<Character>();
 			if(cc)
