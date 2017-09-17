@@ -6,6 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Character Data", menuName = "New Character Data")]
 public class CharacterData : ScriptableObject
 {
+	public string nameText;
+	public string heroText;
+
 	public float maxHP;
 	public float maxMP;
 

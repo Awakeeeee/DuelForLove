@@ -13,8 +13,8 @@ public abstract class SkillBehaviour : MonoBehaviour
 	[HideInInspector]public SkillData skillDataInstance;
 
 	[Header("Process Mornitor")]
-	public float timer;
-	public bool casting;
+	public float cdTimer;
+	public bool triggerCastingUpdate;
 
 	//the character/hero this skill belongs to
 	protected Character mc;
@@ -29,15 +29,15 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		skillDataInstance = Instantiate(skillDataDefault);
 
-		casting = false;
-		timer = skillDataInstance.cd;
+		triggerCastingUpdate = false;
+		cdTimer = skillDataInstance.cd;
 		PreloadEffects();
 	}
 
 	protected void Update()
 	{
 		GeneralTimerUpdate();
-		if(casting)
+		if(triggerCastingUpdate)
 		{
 			Casting();
 		}
@@ -65,13 +65,22 @@ public abstract class SkillBehaviour : MonoBehaviour
 
 	protected void GeneralTimerUpdate()
 	{
-		if(timer <= skillDataInstance.cd)
-			timer += Time.deltaTime;
+		if(cdTimer <= skillDataInstance.cd)
+			cdTimer += Time.deltaTime;
 	}
 
 	protected bool GeneralCastTest()
 	{
-		if(timer < skillDataInstance.cd)
+		if(triggerCastingUpdate)	//cannot cast the same skill if it is casting
+		{
+			return false;
+		}
+		if(hero.SkillIsAnimating)	//TODO if a skill is animating, cannot cast another skill
+		{
+			return false;
+		}
+
+		if(cdTimer < skillDataInstance.cd)
 		{
 			Debug.LogWarning(mc.playerSwitch.ToString() + " " + skillDataInstance.skillName + " is not ready yet!");
 			return false;
@@ -79,14 +88,6 @@ public abstract class SkillBehaviour : MonoBehaviour
 		if(mc.Chp.CurrentMP < skillDataInstance.enegyCost)
 		{
 			Debug.LogWarning(mc.playerSwitch.ToString() + " " + skillDataInstance.skillName + " not enough enegy!");
-			return false;
-		}
-		if(casting)
-		{
-			return false;
-		}
-		if(hero.SkillIsAnimating)	//TODO not really?
-		{
 			return false;
 		}
 
@@ -99,8 +100,8 @@ public abstract class SkillBehaviour : MonoBehaviour
 	///Including flag reset, consumpetion, UI change, start SFX.
 	protected virtual void CommonOnCastSuccessfully()
 	{
-		timer = 0.0f;
-		casting = true;
+		cdTimer = 0.0f;
+		triggerCastingUpdate = true;
 		mc.Chp.ConsumeEnegy(skillDataInstance.enegyCost);
 		ui.SkillUIColdDown(sIndex);
 		PlayRandomSkillAudio(skillDataInstance.castClips);
@@ -109,7 +110,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 	protected virtual void CommonOnCastFailed()
 	{
 		mc.Csc.BreakSkillAnim(sIndex);
-		casting = false;
+		triggerCastingUpdate = false;
 	}
 	///Call this when enter PreCast().
 	///Including start animation.
@@ -119,7 +120,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 	}
 		
 	///On pre-cast you can 's' the skill to determine fail on success
-	protected virtual IEnumerator PreCastCo()
+	protected virtual IEnumerator SedSkillCoroutine()
 	{
 		float timer = 0.0f;
 		while(timer < skillDataInstance.preCastTime)
@@ -135,10 +136,12 @@ public abstract class SkillBehaviour : MonoBehaviour
 		}
 		CommonOnCastSuccessfully();
 	}
-
+		
+	/// Stop casting update. Anim to free state. Play end audio clip.
 	protected virtual void CommonOnEndCast()
 	{
-		casting = false;
+		triggerCastingUpdate = false;
+		mc.Csc.CurrentCastingAnimEnd();
 		PlayRandomSkillAudio(skillDataInstance.endClips);
 	}
 
@@ -161,6 +164,14 @@ public abstract class SkillBehaviour : MonoBehaviour
 		{
 			mc.Ads.PlayOneShot(ac);
 		}
+	}
+	public void PlayOptionalClip(int clipIndex)
+	{
+		if(skillDataInstance.optionalClips[clipIndex] == null)
+			return;
+
+		AudioClip oa = skillDataInstance.optionalClips[clipIndex].clip;
+		mc.Ads.PlayOneShot(oa);
 	}
 
 	//optimization

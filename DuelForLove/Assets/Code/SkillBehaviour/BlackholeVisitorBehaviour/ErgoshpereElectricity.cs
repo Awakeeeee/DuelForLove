@@ -7,8 +7,9 @@ public class ErgoshpereElectricity : SkillBehaviour
 	protected override void PreCast ()
 	{
 		CommonOnPreCast();
+		PlayOptionalClip(0);
 
-		StartCoroutine(PreCastCo());
+		StartCoroutine(SedSkillCoroutine());
 	}
 
 	//My note: if the skill can be s-ed, you use PreCastCo() and override OnFail and OnSuccess

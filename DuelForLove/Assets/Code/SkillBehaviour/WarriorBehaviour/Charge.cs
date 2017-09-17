@@ -37,7 +37,7 @@ public class Charge : SkillBehaviour
 
 		if(chargeTimer < skillDataInstance.skillDuration && hit.transform == null)
 		{
-			mc.transform.position += mc.transform.forward * skillDataInstance.buffs[0].value * Time.deltaTime;
+			mc.transform.position += mc.transform.forward * skillDataInstance.optionalParams[0].value * Time.deltaTime;
 		}else
 		{
 			EndCast();

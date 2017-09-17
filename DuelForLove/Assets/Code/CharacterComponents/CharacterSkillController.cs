@@ -158,10 +158,10 @@ public class CharacterSkillController : MonoBehaviour
 			break;
 		}
 
-		BackToFreeState();
+		CurrentCastingAnimEnd();
 	}
 
-	public void BackToFreeState()
+	public void CurrentCastingAnimEnd()
 	{
 		aSkillIsAnimating = false;
 	}

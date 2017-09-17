@@ -24,6 +24,7 @@ public class Character : MonoBehaviour
 	[Header("Data")]
 	public CharacterData dataDefault;
 	public CharacterData dataInstance;
+	public CharacterStateUI stateUIPrefab;
 	public float moveSpeed;
 	public float rotateSpeed;
 
@@ -44,6 +45,7 @@ public class Character : MonoBehaviour
 	private CharacterHP chp;
 	private CharacterMovement cmm;
 	private CharacterSkillController csc;
+	private CharacterStateUI csu;
 
 	public Rigidbody Rb {get {return rb;}}
 	public CapsuleCollider Cpc {get {return cpc;}}
@@ -51,6 +53,7 @@ public class Character : MonoBehaviour
 	public CharacterHP Chp {get {return chp;}}
 	public CharacterMovement Cmm {get {return cmm;}}
 	public CharacterSkillController Csc {get {return csc;}}
+	public CharacterStateUI Csu {get {return csu;}}
 
 	void Awake()
 	{
@@ -62,6 +65,13 @@ public class Character : MonoBehaviour
 		chp = GetComponent<CharacterHP>();
 		cmm = GetComponent<CharacterMovement>();
 		csc = GetComponentInChildren<CharacterSkillController>();
+		csu = GetComponentInChildren<CharacterStateUI>();
+		if(csu == null)
+		{
+			csu = Instantiate(stateUIPrefab);
+			csu.transform.parent = this.transform;
+			csu.transform.localPosition = new Vector3(1f, 0f, -0.1f);
+		}
 
 		dataInstance = Instantiate(dataDefault);
 		ResetAllCharacterData();
@@ -130,6 +140,7 @@ public class Character : MonoBehaviour
 	}
 	IEnumerator StunnedCo(float duration)
 	{
+		csu.ToggleStunPrompt(true);
 		SetMovementPermission(false, false);
 		SetActionPermission(false);
 		float timer = 0;
@@ -138,6 +149,7 @@ public class Character : MonoBehaviour
 			timer += Time.deltaTime;
 			yield return null;
 		}
+		csu.ToggleStunPrompt(false);
 		SetMovementPermission(true, true);
 		SetActionPermission(true);
 	}

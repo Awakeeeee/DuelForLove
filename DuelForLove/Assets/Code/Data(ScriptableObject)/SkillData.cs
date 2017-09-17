@@ -32,8 +32,7 @@ public class SkillData : ScriptableObject
 	public float bulletSpeed;
 	public float range;
 	public LayerMask targetLayer;
-	public Buff[] buffs;
-	public Debuff[] debuffs;
+	public OptionalParam[] optionalParams;
 
 	[Header("VFX")]
 	public GameObject castEffect;
@@ -44,18 +43,18 @@ public class SkillData : ScriptableObject
 	public AudioClip[] castClips;
 	public AudioClip[] hitClips;
 	public AudioClip[] endClips;
+	public OptionalSound[] optionalClips;
 }
 
 [System.Serializable]
-public class Buff
+public class OptionalParam
 {
 	public float value;
 	public string info;
 }
-
 [System.Serializable]
-public class Debuff
+public class OptionalSound
 {
-	public float value;
+	public AudioClip clip;
 	public string info;
 }

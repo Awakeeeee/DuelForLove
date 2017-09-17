@@ -11,7 +11,7 @@ public class Shield : SkillBehaviour
 		CommonOnPreCast();
 
 		CommonOnCastSuccessfully();
-		mc.ChangeMoveSpeed(skillDataInstance.debuffs[0].value);
+		mc.ChangeMoveSpeed(skillDataInstance.optionalParams[0].value);
 	}
 
 	protected override void Casting ()
