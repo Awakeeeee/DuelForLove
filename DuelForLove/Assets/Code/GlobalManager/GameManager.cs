@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : PersistentSingletonBase<GameManager>
 {
+	public HeroCard currentCharacter_1P;
+	public HeroCard currentCharacter_2P;
+
 	public Character player_1p;
 	public Character player_2p;
 

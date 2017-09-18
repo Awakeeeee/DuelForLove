@@ -69,7 +69,7 @@ public class Character : MonoBehaviour
 		if(csu == null)
 		{
 			csu = Instantiate(stateUIPrefab);
-			csu.transform.parent = this.transform;
+			csu.transform.SetParent(this.transform);
 			csu.transform.localPosition = new Vector3(1f, 0f, -0.1f);
 		}
 
