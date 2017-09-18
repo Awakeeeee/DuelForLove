@@ -4,19 +4,107 @@ using UnityEngine;
 
 public class GameManager : PersistentSingletonBase<GameManager>
 {
-	public HeroCard currentCharacter_1P;
-	public HeroCard currentCharacter_2P;
-
-	public Character player_1p;
+	public bool isDevelopmentMode;
+	public Character player_1P;
+	public Vector3 startPos_1P;
 	public Character player_2p;
+	public Vector3 startPos_2P;
+
+	void OnEnable()
+	{
+		Debug.Log("GameManager OnEnable!");
+
+		if(SceneController.Instance)
+		{
+			SceneController.Instance.LoadSceneEvent += CreateCharactersInGameScene;
+		}
+	}
+
+	void OnDisable()
+	{
+		if(SceneController.Instance)
+		{
+			SceneController.Instance.LoadSceneEvent -= CreateCharactersInGameScene;
+		}
+	}
 
 	void Start()
 	{
 		Debug.Log("GameManager Start!");
 
-		player_1p.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
-		player_1p.Csc.LinkUI(GUIManager.Instance.skills_1p);
+		if(isDevelopmentMode)
+		{
+			player_1P.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
+			player_1P.Csc.LinkUI(GUIManager.Instance.skills_1p);
+			player_2p.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
+			player_2p.Csc.LinkUI(GUIManager.Instance.skills_2p);
+		}
+	}
+
+	//TEST
+	void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			SceneController.Instance.LoadScene(1);
+		}
+	}
+
+	public void SetSelectedHero(HeroSelectionController hc)
+	{
+		if(hc.index == 1)
+		{
+			player_1P = hc.currentCard.characterPrefab;
+		}
+		else if(hc.index == 2)
+		{
+			player_2p = hc.currentCard.characterPrefab;
+		}else
+		{
+			Debug.LogError("Invild character index passed from Hero selection to GameMnager.");
+		}
+
+		AttempFinishSelection();
+	}
+		
+	/// Everytime a player has selected a hero, check if both players done selection, if so, go next scene.
+	public void AttempFinishSelection()
+	{
+		if(player_1P == null || player_2p == null)
+			return;
+
+		if(SceneController.Instance)
+		{
+			SceneController.Instance.LoadScene(3);
+		}
+	}
+
+	private void CreateCharactersInGameScene()
+	{
+		if(isDevelopmentMode)
+			return;
+		
+		if(player_1P == null || player_2p == null)
+		{
+			Debug.Log("New non-game scene is loaded.");
+			ClearCharacterData();
+			return;
+		}
+
+		player_1P = Instantiate(player_1P, startPos_1P, player_1P.transform.rotation);
+		player_1P.playerSwitch = Character.PlayerSwitch._1P;
+		player_1P.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
+		player_1P.Csc.LinkUI(GUIManager.Instance.skills_1p);
+
+		player_2p = Instantiate(player_2p, startPos_2P, player_2p.transform.rotation);
+		player_2p.playerSwitch = Character.PlayerSwitch._2P;
 		player_2p.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
 		player_2p.Csc.LinkUI(GUIManager.Instance.skills_2p);
+	}
+
+	private void ClearCharacterData()
+	{
+		player_1P = null;
+		player_2p = null;
 	}
 }

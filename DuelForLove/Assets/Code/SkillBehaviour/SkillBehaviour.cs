@@ -59,7 +59,6 @@ public abstract class SkillBehaviour : MonoBehaviour
 		{
 			return;
 		}
-
 		PreCast();
 	}
 

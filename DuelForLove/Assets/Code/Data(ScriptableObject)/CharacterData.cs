@@ -8,6 +8,9 @@ public class CharacterData : ScriptableObject
 {
 	public string nameText;
 	public string heroText;
+	[Multiline]
+	public string descriptionText;
+	public Sprite avatar;
 
 	public float maxHP;
 	public float maxMP;

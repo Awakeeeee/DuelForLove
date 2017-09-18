@@ -32,6 +32,7 @@ public class GravitionalCollapse : SkillBehaviour
 			}
 			else if(Input.GetButtonDown(mc.skill_4_Axis))
 			{
+				Debug.Log("called");
 				OnCircleCast(true);
 				intervalTimer = 100f;
 				CommonOnCastSuccessfully();
