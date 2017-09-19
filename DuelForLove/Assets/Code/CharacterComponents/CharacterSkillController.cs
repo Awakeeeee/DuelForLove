@@ -71,7 +71,8 @@ public class CharacterSkillController : MonoBehaviour
 		skillsUI.SetSkillUIContent(data);
 	}
 
-	protected virtual void Update()
+	//Detect initial skill input in LateUpdate
+	protected virtual void LateUpdate()
 	{
 		if(!mc.actionPermission)
 			return;

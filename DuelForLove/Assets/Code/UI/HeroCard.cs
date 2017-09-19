@@ -8,10 +8,7 @@ public class HeroCard : MonoBehaviour
 	[Header("Data")]
 	public Character characterPrefab;
 	public CharacterData characterData;
-	public SkillData skillData_1;
-	public SkillData skillData_2;
-	public SkillData skillData_3;
-	public SkillData skillData_4;
+	public SkillData[] skillData;
 	[Header("Neighbours")]
 	public HeroCard up;
 	public HeroCard down;

@@ -6,10 +6,7 @@ using UnityEngine.UI;
 public class HeroInfoUI : MonoBehaviour 
 {
 	public Image heroImage;
-	public Image skill_1;
-	public Image skill_2;
-	public Image skill_3;
-	public Image skill_4;
+	public SkillCard[] skillCards;
 
 	public Text heroName;
 	public Text heroOccu;
@@ -35,9 +32,44 @@ public class HeroInfoUI : MonoBehaviour
 		heroOccu.text = hc.characterData.heroText;
 		heroDescription.text = hc.characterData.descriptionText;
 
-		skill_1.sprite = hc.skillData_1.skillImage;
-		skill_2.sprite = hc.skillData_2.skillImage;
-		skill_3.sprite = hc.skillData_3.skillImage;
-		skill_4.sprite = hc.skillData_4.skillImage;
+		for(int i = 0; i < skillCards.Length; i++)
+		{
+			skillCards[i].data = hc.skillData[i];
+			skillCards[i].InitCard();
+		}
+	}
+	///Set the infomation in skill panel, prepare to be displayed(not showing until confirm).
+	public void SetSkillInfo(SkillData data)
+	{
+		detailSkillImage.sprite = data.skillImage;
+		detailSkillName.text = data.skillName;
+		detailSkillDescription.text = data.detailDescription;
+		detailSkillOneLineDesc.text = data.oneLineDescription;
+	}
+
+	public void ToggleSkillCard()
+	{
+		float targetAlpha = skillDetailPanel.alpha > 0 ? 0 : 1;
+		StartCoroutine(FadeSkillCard(targetAlpha));
+	}
+	IEnumerator FadeSkillCard(float targetAlpha)
+	{
+		if(Mathf.Abs(targetAlpha - skillDetailPanel.alpha) < 0.05f)
+			yield break;
+		
+		float timer = 0.0f;
+		float startAlpha = targetAlpha > 0 ? 0 : 1;
+		skillDetailPanel.alpha = startAlpha;
+		while(timer < 0.3f)
+		{
+			skillDetailPanel.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / 0.3f);
+			timer += Time.deltaTime;
+			yield return null;
+		}
+		skillDetailPanel.alpha = targetAlpha;
+	}
+	public void HideSkillCardImmediately()
+	{
+		skillDetailPanel.alpha = 0f;
 	}
 }
