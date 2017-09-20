@@ -18,6 +18,7 @@ public class CharacterMovement : MonoBehaviour
 	public float collidingMovementPercent = 0f;
 
 	[Header("Shake")]
+	public Transform shakerTransform;
 	private float shakeAmount;
 	private float shakeTime;
 	private float shakeFactor;
@@ -47,7 +48,6 @@ public class CharacterMovement : MonoBehaviour
 	void Update()
 	{
 		CastSurroundingRays();
-		Shake();
 
 		Rotate();
 		Move();
@@ -147,22 +147,24 @@ public class CharacterMovement : MonoBehaviour
 		shakeTime = time;
 		shakeFactor = factor;
 
+		StopAllCoroutines();
 		StartCoroutine(Shake());
 	}
 	IEnumerator Shake()
 	{
-		Vector3 originalPos = transform.position;
 		float shakeTimer = 0.0f;
-		float amount = Mathf.Lerp(shakeAmount, 0f, shakeTimer / shakeTime);
+		if(shakerTransform == null)
+			yield break;
 
 		while(shakeTimer < shakeTime)
 		{
+			float amount = Mathf.Lerp(shakeAmount, 0f, shakeTimer / shakeTime);
 			Vector3 shakeVec = Random.insideUnitSphere * amount;
-			transform.position = new Vector3(originalPos.x + shakeVec.x, originalPos.y, originalPos.z + shakeVec.z);
+			shakerTransform.localPosition = new Vector3(shakeVec.x, 0f, shakeVec.z);
 			shakeTimer += Time.deltaTime * shakeFactor;
 			yield return null;
 		}
-		transform.position = originalPos;
+		shakerTransform.localPosition = Vector3.zero;
 		shakeTimer = 0.0f;
 	}
 }

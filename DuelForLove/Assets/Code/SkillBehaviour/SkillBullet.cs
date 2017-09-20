@@ -11,6 +11,8 @@ public class SkillBullet : MonoBehaviour
 	private float damage;
 	private float knockBack;
 
+	//delegate?
+
 	void OnEnable()
 	{
 		
@@ -27,10 +29,17 @@ public class SkillBullet : MonoBehaviour
 			return;
 
 		Character cc = other.GetComponent<Character>();
+		ShieldBlock sb = other.GetComponent<ShieldBlock>();
 		if(cc)
 		{
 			cc.Chp.TakeDamage(damage);
 			cc.Cmm.AddForce(knockBack, transform.forward);
+		}
+		if(sb)
+		{
+			sb.Owner.Cmm.TriggerShake();
+			sb.Owner.Cmm.AddForce(knockBack, transform.forward);
+			sb.AbsorbDamage(damage);
 		}
 
 		belongSkill.ShowHitEffect(this.transform.position, Quaternion.identity);

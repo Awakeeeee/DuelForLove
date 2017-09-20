@@ -127,10 +127,18 @@ public class Character : MonoBehaviour
 	{
 		moveSpeed = moveSpeed * percent;
 	}
-
 	public void ResetMoveSpeed()
 	{
 		moveSpeed = dataInstance.moveSpeed;
+	}
+
+	public void ChangeKnockResist(float percent)
+	{
+		dataInstance.knockBackResist *= percent;
+	}
+	public void ResetKnockResist()
+	{
+		dataInstance.knockBackResist = dataDefault.knockBackResist;
 	}
 
 	public void Stunned(float duration)
