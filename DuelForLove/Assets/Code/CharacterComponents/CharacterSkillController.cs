@@ -37,9 +37,13 @@ public class CharacterSkillController : MonoBehaviour
 	private Animator anim;
 	private SkillUIController skillsUI;
 
+	public WposProgressBar progressBarPrefab;
+	private WposProgressBar progressBar;
+	public WposProgressBar ProgressBar {get {return progressBar;}}
+
 	protected virtual void Awake()
 	{
-		Debug.Log("Hero base Awake!");
+		Debug.Log("Hero skill controller Awake!");
 
 		mc = GetComponent<Character>();
 		if(!mc)
@@ -49,13 +53,18 @@ public class CharacterSkillController : MonoBehaviour
 		if(!mc)
 		{
 			Debug.LogError("A hero needs to have a basic character component.");
+			return;
 		}
+
+		progressBar = Instantiate(progressBarPrefab, mc.transform) as WposProgressBar;
+		progressBar.transform.localPosition = Vector3.zero;
+
 		anim = GetComponent<Animator>();
 	}
 
 	protected virtual void Start()
 	{
-		Debug.Log("Hero base Start!");
+		Debug.Log("Hero skill controller Start!");
 		InitAnimation();
 
 		skill_1.Init(1, mc, this, skillsUI);

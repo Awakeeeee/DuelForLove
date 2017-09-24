@@ -32,7 +32,6 @@ public class GravitionalCollapse : SkillBehaviour
 			}
 			else if(Input.GetButtonDown(mc.skill_4_Axis))
 			{
-				Debug.Log("called");
 				OnCircleCast(true);
 				intervalTimer = 100f;
 				CommonOnCastSuccessfully();
@@ -67,7 +66,7 @@ public class GravitionalCollapse : SkillBehaviour
 			//count end
 			intervalTimer += Time.deltaTime;
 			castingTimer += Time.deltaTime;
-			mc.Csu.UpdateCastingProgress(1 - castingTimer / skillDataInstance.skillDuration);
+			hero.ProgressBar.UpdateBar(1 - castingTimer / skillDataInstance.skillDuration);
 			if(Input.GetButtonUp(mc.skill_4_Axis) || castingTimer > skillDataInstance.skillDuration || mc.Chp.CurrentMP < (skillDataInstance.enegyCost / 10f))
 			{
 				if(castEffectInstance.activeInHierarchy)
@@ -81,7 +80,7 @@ public class GravitionalCollapse : SkillBehaviour
 	protected override void EndCast ()
 	{
 		CommonOnEndCast();
-		mc.Csu.ToggleCastingProgress(false);
+		hero.ProgressBar.ToggleBar(false);
 		hero.BreakSkillAnim(sIndex);
 		mc.SetMovementPermission(true, true);
 		collapseHasCreated = false;
@@ -99,7 +98,7 @@ public class GravitionalCollapse : SkillBehaviour
 		}else
 		{
 			collapsePos = new Vector3(circle.transform.position.x, mc.transform.position.y, circle.transform.position.z);
-			mc.Csu.ToggleCastingProgress(true);
+			hero.ProgressBar.ToggleBar(true);
 		}
 		collapseHasCreated = holeCreated;
 		castingTimer = 0.0f;

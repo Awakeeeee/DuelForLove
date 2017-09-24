@@ -6,6 +6,7 @@ public class Shield : SkillBehaviour
 {
 	public ShieldBlock shieldBlock;
 	private float castingTimer;
+	private StateBuffUI debuff;
 	
 	protected override void PreCast ()
 	{
@@ -14,6 +15,7 @@ public class Shield : SkillBehaviour
 		CommonOnCastSuccessfully();
 		mc.ChangeMoveSpeed(skillDataInstance.optionalParams[0].value);
 		mc.ChangeKnockResist(skillDataInstance.optionalParams[1].value);
+		debuff = mc.SetStateBuff(BuffType.Slow);
 
 		//Enable shield-block, or create the first one
 		if(shieldBlock)
@@ -37,8 +39,8 @@ public class Shield : SkillBehaviour
 	protected override void Casting ()
 	{
 		castingTimer += Time.deltaTime;
-		mc.Csu.ToggleCastingProgress(true);
-		mc.Csu.UpdateCastingProgress(1 - castingTimer / skillDataInstance.skillDuration);
+		hero.ProgressBar.ToggleBar(true);
+		hero.ProgressBar.UpdateBar(1 - castingTimer / skillDataInstance.skillDuration);
 
 		if(castingTimer >= skillDataInstance.skillDuration || Input.GetButtonUp(mc.skill_2_Axis) || shieldBlock.IsBroken)	//TODO the axis..
 		{
@@ -53,8 +55,10 @@ public class Shield : SkillBehaviour
 		hero.BreakSkillAnim(this.sIndex);
 		mc.ResetMoveSpeed();
 		mc.ResetKnockResist();
+		mc.RemoveStateBuff(debuff);
+
 		shieldBlock.gameObject.SetActive(false);
-		mc.Csu.ToggleCastingProgress(false);
+		hero.ProgressBar.ToggleBar(false);
 		castingTimer = 0.0f;
 	}
 }

@@ -24,7 +24,6 @@ public class Character : MonoBehaviour
 	[Header("Data")]
 	public CharacterData dataDefault;
 	public CharacterData dataInstance;
-	public CharacterStateUI stateUIPrefab;
 	public float moveSpeed;
 	public float rotateSpeed;
 
@@ -41,19 +40,21 @@ public class Character : MonoBehaviour
 
 	private Rigidbody rb;
 	private CapsuleCollider cpc;
+	private SpriteRenderer spr;
 	private AudioSource ads;
 	private CharacterHP chp;
 	private CharacterMovement cmm;
 	private CharacterSkillController csc;
-	private CharacterStateUI csu;
 
 	public Rigidbody Rb {get {return rb;}}
 	public CapsuleCollider Cpc {get {return cpc;}}
+	public SpriteRenderer Spr {get {return spr;}}
 	public AudioSource Ads {get {return ads;}}
 	public CharacterHP Chp {get {return chp;}}
 	public CharacterMovement Cmm {get {return cmm;}}
 	public CharacterSkillController Csc {get {return csc;}}
-	public CharacterStateUI Csu {get {return csu;}}
+
+	private StateBuffUIController sbu;
 
 	void Awake()
 	{
@@ -61,17 +62,11 @@ public class Character : MonoBehaviour
 
 		rb = GetComponent<Rigidbody>();
 		cpc = GetComponent<CapsuleCollider>();
+		spr = GetComponentInChildren<SpriteRenderer>();
 		ads = GetComponent<AudioSource>();
 		chp = GetComponent<CharacterHP>();
 		cmm = GetComponent<CharacterMovement>();
 		csc = GetComponentInChildren<CharacterSkillController>();
-		csu = GetComponentInChildren<CharacterStateUI>();
-		if(csu == null)
-		{
-			csu = Instantiate(stateUIPrefab);
-			csu.transform.SetParent(this.transform);
-			csu.transform.localPosition = new Vector3(1f, 0f, -0.1f);
-		}
 
 		dataInstance = Instantiate(dataDefault);
 		ResetAllCharacterData();
@@ -92,12 +87,26 @@ public class Character : MonoBehaviour
 		CurrentState = PlayerState.Idle;
 	}
 
+	public void LinkUI(StateBuffUIController _sbu)
+	{
+		sbu = _sbu;
+	}
+
 	public void TransitState(PlayerState state)
 	{
 		CurrentState = state;
 	}
 
 	//character gameplay state change
+	public StateBuffUI SetStateBuff(BuffType type)
+	{
+		return sbu.SetBuff(type);
+	}
+	public void RemoveStateBuff(StateBuffUI buffRef)
+	{
+		buffRef.Hide();
+	}
+
 	public void ResetAllCharacterData()
 	{
 		Chp.maxHP = dataInstance.maxHP;
@@ -141,6 +150,7 @@ public class Character : MonoBehaviour
 		dataInstance.knockBackResist = dataDefault.knockBackResist;
 	}
 
+	//stun
 	public void Stunned(float duration)
 	{
 		StopAllCoroutines();
@@ -148,7 +158,7 @@ public class Character : MonoBehaviour
 	}
 	IEnumerator StunnedCo(float duration)
 	{
-		csu.ToggleStunPrompt(true);
+		StateBuffUI debuffRef = SetStateBuff(BuffType.Stun);
 		SetMovementPermission(false, false);
 		SetActionPermission(false);
 		float timer = 0;
@@ -157,8 +167,38 @@ public class Character : MonoBehaviour
 			timer += Time.deltaTime;
 			yield return null;
 		}
-		csu.ToggleStunPrompt(false);
+
+		RemoveStateBuff(debuffRef);
 		SetMovementPermission(true, true);
 		SetActionPermission(true);
+	}
+	//toxic
+	public void Toxicosis(float duration, float dot, float dotPeriod)
+	{
+		Debug.Log("244234234324");
+		StopAllCoroutines();
+		StartCoroutine(ToxicosisCo(duration, dot, dotPeriod));
+	}
+	IEnumerator ToxicosisCo(float duration, float dot, float dotPeriod)
+	{
+		StateBuffUI debuffRef = SetStateBuff(BuffType.Toxic);
+		spr.color = Color.green;
+
+		float timer = 0.0f;
+		float dotTimer = 0.0f;
+		while(timer < duration)
+		{
+			dotTimer += Time.deltaTime;
+			if(dotTimer > dotPeriod)
+			{
+				chp.TakeDamage(dot);
+				dotTimer = 0.0f;
+			}
+
+			timer += Time.deltaTime;
+			yield return null;
+		}
+		RemoveStateBuff(debuffRef);
+		spr.color = Color.white;
 	}
 }

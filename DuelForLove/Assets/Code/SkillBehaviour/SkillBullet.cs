@@ -11,7 +11,8 @@ public class SkillBullet : MonoBehaviour
 	private float damage;
 	private float knockBack;
 
-	//delegate?
+	public delegate void OptionalEffect(Character target);
+	public OptionalEffect DeleMethod;
 
 	void OnEnable()
 	{
@@ -32,8 +33,12 @@ public class SkillBullet : MonoBehaviour
 		ShieldBlock sb = other.GetComponent<ShieldBlock>();
 		if(cc)
 		{
+			//general
 			cc.Chp.TakeDamage(damage);
 			cc.Cmm.AddForce(knockBack, transform.forward);
+			//custom
+			if(DeleMethod != null)
+				DeleMethod(cc);
 		}
 		if(sb)
 		{
@@ -47,7 +52,7 @@ public class SkillBullet : MonoBehaviour
 		this.gameObject.SetActive(false);
 	}
 
-	public void InitBullet(SkillBehaviour _belongSkill, Character _owner)
+	public void InitBullet(SkillBehaviour _belongSkill, Character _owner, OptionalEffect optionalEffectMethod = null)
 	{
 		belongSkill = _belongSkill;
 		owner = _owner;
@@ -55,5 +60,11 @@ public class SkillBullet : MonoBehaviour
 		speed = belongSkill.skillDataInstance.bulletSpeed;
 		damage = belongSkill.skillDataInstance.damage;
 		knockBack = belongSkill.skillDataInstance.knockForce;
+
+		if(optionalEffectMethod != null)
+		{
+			DeleMethod = null;
+			DeleMethod += optionalEffectMethod;	
+		}
 	}
 }

@@ -7,7 +7,7 @@ public class GameManager : PersistentSingletonBase<GameManager>
 	public bool isDevelopmentMode;
 	public Character player_1P;
 	public Vector3 startPos_1P;
-	public Character player_2p;
+	public Character player_2P;
 	public Vector3 startPos_2P;
 
 	void OnEnable()
@@ -36,8 +36,10 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		{
 			player_1P.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
 			player_1P.Csc.LinkUI(GUIManager.Instance.skills_1p);
-			player_2p.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
-			player_2p.Csc.LinkUI(GUIManager.Instance.skills_2p);
+			player_1P.LinkUI(GUIManager.Instance.stateBuff_1p);
+			player_2P.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
+			player_2P.Csc.LinkUI(GUIManager.Instance.skills_2p);
+			player_2P.LinkUI(GUIManager.Instance.stateBuff_2p);
 		}
 	}
 
@@ -58,7 +60,7 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		}
 		else if(hc.index == 2)
 		{
-			player_2p = hc.currentCard.characterPrefab;
+			player_2P = hc.currentCard.characterPrefab;
 		}else
 		{
 			Debug.LogError("Invild character index passed from Hero selection to GameMnager.");
@@ -70,7 +72,7 @@ public class GameManager : PersistentSingletonBase<GameManager>
 	/// Everytime a player has selected a hero, check if both players done selection, if so, go next scene.
 	public void AttempFinishSelection()
 	{
-		if(player_1P == null || player_2p == null)
+		if(player_1P == null || player_2P == null)
 			return;
 
 		if(SceneController.Instance)
@@ -84,7 +86,7 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		if(isDevelopmentMode)
 			return;
 		
-		if(player_1P == null || player_2p == null)
+		if(player_1P == null || player_2P == null)
 		{
 			Debug.Log("New non-game scene is loaded.");
 			ClearCharacterData();
@@ -95,16 +97,18 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		player_1P.playerSwitch = Character.PlayerSwitch._1P;
 		player_1P.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
 		player_1P.Csc.LinkUI(GUIManager.Instance.skills_1p);
+		player_1P.LinkUI(GUIManager.Instance.stateBuff_1p);
 
-		player_2p = Instantiate(player_2p, startPos_2P, player_2p.transform.rotation);
-		player_2p.playerSwitch = Character.PlayerSwitch._2P;
-		player_2p.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
-		player_2p.Csc.LinkUI(GUIManager.Instance.skills_2p);
+		player_2P = Instantiate(player_2P, startPos_2P, player_2P.transform.rotation);
+		player_2P.playerSwitch = Character.PlayerSwitch._2P;
+		player_2P.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
+		player_2P.Csc.LinkUI(GUIManager.Instance.skills_2p);
+		player_2P.LinkUI(GUIManager.Instance.stateBuff_2p);	
 	}
 
 	private void ClearCharacterData()
 	{
 		player_1P = null;
-		player_2p = null;
+		player_2P = null;
 	}
 }

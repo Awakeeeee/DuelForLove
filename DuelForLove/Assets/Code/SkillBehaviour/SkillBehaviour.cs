@@ -166,7 +166,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 	}
 	public void PlayOptionalClip(int clipIndex)
 	{
-		if(skillDataInstance.optionalClips[clipIndex] == null)
+		if(skillDataInstance.optionalClips.Length <= 0 || skillDataInstance.optionalClips[clipIndex] == null)
 			return;
 
 		AudioClip oa = skillDataInstance.optionalClips[clipIndex].clip;
@@ -218,6 +218,12 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		for(int i = 0; i < pathEffectInstance.Length; i++)
 		{
+			if(pathEffectInstance[i] == null)
+			{
+				Debug.LogWarning("Skill trying to use path effect but no effect is set in skill data.");
+				return null;
+			}
+
 			if(!pathEffectInstance[i].activeInHierarchy)
 			{
 				pathEffectInstance[i].transform.position = wpos;
