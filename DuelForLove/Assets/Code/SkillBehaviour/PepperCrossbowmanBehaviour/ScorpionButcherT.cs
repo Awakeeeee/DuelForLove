@@ -36,6 +36,6 @@ public class ScorpionButcherT : SkillBehaviour {
 
 	void ToxicArrow(Character target)
 	{
-		target.Toxicosis(skillDataInstance.effectDuration, skillDataDefault.damage, skillDataInstance.optionalParams[0].value);
+		//target.Toxicosis(skillDataInstance.effectDuration, skillDataDefault.damage, skillDataInstance.optionalParams[0].value);
 	}
 }

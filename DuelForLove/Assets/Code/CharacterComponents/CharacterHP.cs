@@ -31,9 +31,9 @@ public class CharacterHP : HealthBase
 		currentMP = maxMP;
 
 		if(hpBarUI)
-			hpBarUI.ResetBar(maxHP, 1f, mc.dataInstance.healthRecoverPerSec);
+			hpBarUI.ResetBar(maxHP, 1f, mc.McData.healthRecoverPerSec);
 		if(enegyBarUI)
-			enegyBarUI.ResetBar(maxMP, 1f, mc.dataInstance.enegyRecoverPerSec);
+			enegyBarUI.ResetBar(maxMP, 1f, mc.McData.enegyRecoverPerSec);
 	}
 
 	void Update()

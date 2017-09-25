@@ -23,9 +23,9 @@ public class Character : MonoBehaviour
 
 	[Header("Data")]
 	public CharacterData dataDefault;
-	public CharacterData dataInstance;
-	public float moveSpeed;
-	public float rotateSpeed;
+
+	private CharacterData mcData;
+	public CharacterData McData {get {return mcData;}}
 
 	[Header("Permission")]
 	public bool movementPermission;
@@ -45,6 +45,7 @@ public class Character : MonoBehaviour
 	private CharacterHP chp;
 	private CharacterMovement cmm;
 	private CharacterSkillController csc;
+	private CharacterBuffController cbc;
 
 	public Rigidbody Rb {get {return rb;}}
 	public CapsuleCollider Cpc {get {return cpc;}}
@@ -53,8 +54,7 @@ public class Character : MonoBehaviour
 	public CharacterHP Chp {get {return chp;}}
 	public CharacterMovement Cmm {get {return cmm;}}
 	public CharacterSkillController Csc {get {return csc;}}
-
-	private StateBuffUIController sbu;
+	public CharacterBuffController Cbc {get {return cbc;}}
 
 	void Awake()
 	{
@@ -67,8 +67,9 @@ public class Character : MonoBehaviour
 		chp = GetComponent<CharacterHP>();
 		cmm = GetComponent<CharacterMovement>();
 		csc = GetComponentInChildren<CharacterSkillController>();
+		cbc = GetComponentInChildren<CharacterBuffController>();
 
-		dataInstance = Instantiate(dataDefault);
+		mcData = Instantiate(dataDefault);
 		ResetAllCharacterData();
 	}
 
@@ -87,35 +88,18 @@ public class Character : MonoBehaviour
 		CurrentState = PlayerState.Idle;
 	}
 
-	public void LinkUI(StateBuffUIController _sbu)
-	{
-		sbu = _sbu;
-	}
-
 	public void TransitState(PlayerState state)
 	{
 		CurrentState = state;
 	}
 
 	//character gameplay state change
-	public StateBuffUI SetStateBuff(BuffType type)
-	{
-		return sbu.SetBuff(type);
-	}
-	public void RemoveStateBuff(StateBuffUI buffRef)
-	{
-		buffRef.Hide();
-	}
-
 	public void ResetAllCharacterData()
 	{
-		Chp.maxHP = dataInstance.maxHP;
-		Chp.maxMP = dataInstance.maxMP;
-		Chp.naturalHPRecover = dataInstance.healthRecoverPerSec;
-		Chp.naturalMPRecover = dataInstance.enegyRecoverPerSec;
-
-		moveSpeed = dataInstance.moveSpeed;
-		rotateSpeed = dataInstance.rotateSpeed;
+		Chp.maxHP = McData.maxHP;
+		Chp.maxMP = McData.maxMP;
+		Chp.naturalHPRecover = McData.healthRecoverPerSec;
+		Chp.naturalMPRecover = McData.enegyRecoverPerSec;
 
 		movementPermission = true;
 		rotationPermission = true;
@@ -134,71 +118,19 @@ public class Character : MonoBehaviour
 
 	public void ChangeMoveSpeed(float percent)
 	{
-		moveSpeed = moveSpeed * percent;
+		McData.moveSpeed *= percent;
 	}
 	public void ResetMoveSpeed()
 	{
-		moveSpeed = dataInstance.moveSpeed;
+		McData.moveSpeed = dataDefault.moveSpeed;
 	}
 
 	public void ChangeKnockResist(float percent)
 	{
-		dataInstance.knockBackResist *= percent;
+		McData.knockBackResist *= percent;
 	}
 	public void ResetKnockResist()
 	{
-		dataInstance.knockBackResist = dataDefault.knockBackResist;
-	}
-
-	//stun
-	public void Stunned(float duration)
-	{
-		StopAllCoroutines();
-		StartCoroutine(StunnedCo(duration));
-	}
-	IEnumerator StunnedCo(float duration)
-	{
-		StateBuffUI debuffRef = SetStateBuff(BuffType.Stun);
-		SetMovementPermission(false, false);
-		SetActionPermission(false);
-		float timer = 0;
-		while(timer < duration)
-		{
-			timer += Time.deltaTime;
-			yield return null;
-		}
-
-		RemoveStateBuff(debuffRef);
-		SetMovementPermission(true, true);
-		SetActionPermission(true);
-	}
-	//toxic
-	public void Toxicosis(float duration, float dot, float dotPeriod)
-	{
-		Debug.Log("244234234324");
-		StopAllCoroutines();
-		StartCoroutine(ToxicosisCo(duration, dot, dotPeriod));
-	}
-	IEnumerator ToxicosisCo(float duration, float dot, float dotPeriod)
-	{
-		StateBuffUI debuffRef = SetStateBuff(BuffType.Toxic);
-		spr.color = Color.green;
-
-		float timer = 0.0f;
-		float dotTimer = 0.0f;
-		while(timer < duration)
-		{
-			dotTimer += Time.deltaTime;
-			if(dotTimer > dotPeriod)
-			{
-				chp.TakeDamage(dot);
-				dotTimer = 0.0f;
-			}
-
-			timer += Time.deltaTime;
-			yield return null;
-		}
-		RemoveStateBuff(debuffRef);
-		spr.color = Color.white;
+		McData.knockBackResist = dataDefault.knockBackResist;
 	}
 }

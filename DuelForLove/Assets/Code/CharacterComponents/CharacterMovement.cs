@@ -90,7 +90,7 @@ public class CharacterMovement : MonoBehaviour
 			return;
 		
 		float rotateAmount = smoothRotate ? Input.GetAxis(mc.horizontalAxis) : Input.GetAxisRaw(mc.horizontalAxis);
-		transform.Rotate(Vector3.up, mc.rotateSpeed * rotateAmount * Time.deltaTime);
+		transform.Rotate(Vector3.up, mc.McData.rotateSpeed * rotateAmount * Time.deltaTime);
 	}
 
 	void Move()
@@ -103,7 +103,7 @@ public class CharacterMovement : MonoBehaviour
 		}
 		
 		float moveAmount = smoothAcceleration ? Input.GetAxis(mc.verticalAxis) : Input.GetAxisRaw(mc.verticalAxis);
-		transform.position += transform.forward * mc.moveSpeed * moveAmount * Time.deltaTime * collidingMultiplier;
+		transform.position += transform.forward * mc.McData.moveSpeed * moveAmount * Time.deltaTime * collidingMultiplier;
 
 		if(Mathf.Abs(moveAmount) > movementStartDeadzone && mc.CurrentState == Character.PlayerState.Idle)
 		{
@@ -122,7 +122,7 @@ public class CharacterMovement : MonoBehaviour
 		if(!forceMove)
 			return;
 
-		externalForceAmount -= mc.dataInstance.knockBackResist * Time.deltaTime;
+		externalForceAmount -= mc.McData.knockBackResist * Time.deltaTime;
 		if(externalForceAmount <= 0f)
 		{
 			externalForceAmount = 0f;

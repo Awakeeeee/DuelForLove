@@ -6,16 +6,15 @@ public class Shield : SkillBehaviour
 {
 	public ShieldBlock shieldBlock;
 	private float castingTimer;
-	private StateBuffUI debuff;
 	
 	protected override void PreCast ()
 	{
 		CommonOnPreCast();
 
 		CommonOnCastSuccessfully();
+		//just dont let this be a buff
 		mc.ChangeMoveSpeed(skillDataInstance.optionalParams[0].value);
 		mc.ChangeKnockResist(skillDataInstance.optionalParams[1].value);
-		debuff = mc.SetStateBuff(BuffType.Slow);
 
 		//Enable shield-block, or create the first one
 		if(shieldBlock)
@@ -55,7 +54,6 @@ public class Shield : SkillBehaviour
 		hero.BreakSkillAnim(this.sIndex);
 		mc.ResetMoveSpeed();
 		mc.ResetKnockResist();
-		mc.RemoveStateBuff(debuff);
 
 		shieldBlock.gameObject.SetActive(false);
 		hero.ProgressBar.ToggleBar(false);

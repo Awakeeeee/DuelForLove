@@ -36,10 +36,10 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		{
 			player_1P.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
 			player_1P.Csc.LinkUI(GUIManager.Instance.skills_1p);
-			player_1P.LinkUI(GUIManager.Instance.stateBuff_1p);
+			player_1P.Cbc.LinkUI(GUIManager.Instance.stateBuff_1p);
 			player_2P.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
 			player_2P.Csc.LinkUI(GUIManager.Instance.skills_2p);
-			player_2P.LinkUI(GUIManager.Instance.stateBuff_2p);
+			player_2P.Cbc.LinkUI(GUIManager.Instance.stateBuff_2p);
 		}
 	}
 
@@ -97,13 +97,13 @@ public class GameManager : PersistentSingletonBase<GameManager>
 		player_1P.playerSwitch = Character.PlayerSwitch._1P;
 		player_1P.Chp.LinkUI(GUIManager.Instance.hpBar_1p, GUIManager.Instance.enegyBar_1p);
 		player_1P.Csc.LinkUI(GUIManager.Instance.skills_1p);
-		player_1P.LinkUI(GUIManager.Instance.stateBuff_1p);
+		player_1P.Cbc.LinkUI(GUIManager.Instance.stateBuff_1p);
 
 		player_2P = Instantiate(player_2P, startPos_2P, player_2P.transform.rotation);
 		player_2P.playerSwitch = Character.PlayerSwitch._2P;
 		player_2P.Chp.LinkUI(GUIManager.Instance.hpBar_2p, GUIManager.Instance.enegyBar_2p);
 		player_2P.Csc.LinkUI(GUIManager.Instance.skills_2p);
-		player_2P.LinkUI(GUIManager.Instance.stateBuff_2p);	
+		player_2P.Cbc.LinkUI(GUIManager.Instance.stateBuff_2p);	
 	}
 
 	private void ClearCharacterData()

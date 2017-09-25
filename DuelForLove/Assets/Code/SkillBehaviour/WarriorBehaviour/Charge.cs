@@ -12,7 +12,6 @@ public class Charge : SkillBehaviour
 
 		CommonOnCastSuccessfully();
 		ShowCastEffect(mc.transform.position, Quaternion.identity);
-		mc.SetMovementPermission(false, false);
 	}
 
 	protected override void Casting ()
@@ -30,7 +29,7 @@ public class Charge : SkillBehaviour
 			if(cc)
 			{
 				cc.Chp.TakeDamage(skillDataInstance.damage);
-				cc.Stunned(skillDataInstance.effectDuration);
+				cc.Cbc.TriggerStun(skillDataInstance.effectDuration);
 				cc.Cmm.TriggerShake();
 			}
 		}
@@ -50,6 +49,5 @@ public class Charge : SkillBehaviour
 
 		hero.BreakSkillAnim(this.sIndex);
 		chargeTimer = 0.0f;
-		mc.SetMovementPermission(true, true);
 	}
 }
