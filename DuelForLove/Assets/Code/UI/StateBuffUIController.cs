@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class StateBuffUIController : MonoBehaviour
 {
+	public StateBuffUI buffPromptPrefab;
 	public BuffDataUI[] buffData;
 
-	private StateBuffUI[] buffs;	//TODO use dynamic list, create and destroy icon
 	private List<StateBuffUI> currentBuffs;
 
 	void Awake()
 	{
-		buffs = GetComponentsInChildren<StateBuffUI>();
 		currentBuffs = new List<StateBuffUI>();
 	}
 
@@ -34,37 +33,31 @@ public class StateBuffUIController : MonoBehaviour
 			Debug.Log("The buff type is not relating to a buff data.");
 			return -1;
 		}
-
 		//grab an empty place
-		for(int i = 0; i < buffs.Length; i++)
+		StateBuffUI newBuffPrompt = Instantiate(buffPromptPrefab, this.transform);
+		newBuffPrompt.Set(data.sprite, data.text);
+		//save the prompt reference in back-end
+		for(int i = 0; i < currentBuffs.Count; i++)
 		{
-			StateBuffUI sbu = buffs[i];
-			if(!sbu.toggled)
+			if(currentBuffs[i] == null)
 			{
-				//set display content
-				sbu.Set(data.sprite, data.text);
-				sbu.Show();
-				//track
-				currentBuffs.Add(sbu);
-				Debug.LogWarning(currentBuffs.Count - 1);
-				return currentBuffs.Count - 1;
+				currentBuffs[i] = newBuffPrompt;
+				return i;
 			}
 		}
-
-		Debug.LogError("Not enough state buff placeholder!");
-		return -1;
+		currentBuffs.Add(newBuffPrompt);
+		return currentBuffs.Count - 1;
 	}
 
 	public void RemoveBuffUI(int trackingIndex)
 	{
 		if(trackingIndex == -1)
 			return;
-		//hide display content
+		//destroy prompt
 		StateBuffUI buffToRemove = currentBuffs[trackingIndex];
-		buffToRemove.Hide();
-		//track end
-		Debug.LogWarning("Removing......" + trackingIndex);
-		currentBuffs.RemoveAt(trackingIndex);
+		Destroy(buffToRemove.gameObject);
+		//remove reference in back-end
+		currentBuffs[trackingIndex] = null;
 	}
 }
 
