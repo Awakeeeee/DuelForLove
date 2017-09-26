@@ -31,6 +31,7 @@ public class SkillBullet : MonoBehaviour
 
 		Character cc = other.GetComponent<Character>();
 		ShieldBlock sb = other.GetComponent<ShieldBlock>();
+		//hit character
 		if(cc)
 		{
 			//general
@@ -40,6 +41,7 @@ public class SkillBullet : MonoBehaviour
 			if(DeleMethod != null)
 				DeleMethod(cc);
 		}
+		//hit shield
 		if(sb)
 		{
 			sb.Owner.Cmm.TriggerShake();
@@ -47,6 +49,7 @@ public class SkillBullet : MonoBehaviour
 			sb.AbsorbDamage(damage);
 		}
 
+		//hit other stuff
 		belongSkill.ShowHitEffect(this.transform.position, Quaternion.identity);
 		belongSkill.PlayRandomSkillAudio(belongSkill.skillDataInstance.hitClips);
 		this.gameObject.SetActive(false);

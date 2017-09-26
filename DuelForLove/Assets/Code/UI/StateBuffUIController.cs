@@ -6,7 +6,7 @@ public class StateBuffUIController : MonoBehaviour
 {
 	public BuffDataUI[] buffData;
 
-	private StateBuffUI[] buffs;
+	private StateBuffUI[] buffs;	//TODO use dynamic list, create and destroy icon
 	private List<StateBuffUI> currentBuffs;
 
 	void Awake()
@@ -16,12 +16,13 @@ public class StateBuffUIController : MonoBehaviour
 	}
 
 	//return an int tracker, allocate the number to caller so that caller can remove this buff
-	public int SetBuffUI(BuffType bType)
+	public int SetBuffUI(BuffTypeUI bType)
 	{
 		//grab data
 		BuffDataUI data = null;
-		foreach(BuffDataUI d in buffData)
+		for(int i = 0; i < buffData.Length; i++)
 		{
+			BuffDataUI d = buffData[i];
 			if(d.type == bType)
 			{
 				data = d;
@@ -35,8 +36,9 @@ public class StateBuffUIController : MonoBehaviour
 		}
 
 		//grab an empty place
-		foreach(StateBuffUI sbu in buffs)
+		for(int i = 0; i < buffs.Length; i++)
 		{
+			StateBuffUI sbu = buffs[i];
 			if(!sbu.toggled)
 			{
 				//set display content
@@ -44,6 +46,7 @@ public class StateBuffUIController : MonoBehaviour
 				sbu.Show();
 				//track
 				currentBuffs.Add(sbu);
+				Debug.LogWarning(currentBuffs.Count - 1);
 				return currentBuffs.Count - 1;
 			}
 		}
@@ -54,10 +57,13 @@ public class StateBuffUIController : MonoBehaviour
 
 	public void RemoveBuffUI(int trackingIndex)
 	{
+		if(trackingIndex == -1)
+			return;
 		//hide display content
 		StateBuffUI buffToRemove = currentBuffs[trackingIndex];
 		buffToRemove.Hide();
 		//track end
+		Debug.LogWarning("Removing......" + trackingIndex);
 		currentBuffs.RemoveAt(trackingIndex);
 	}
 }
@@ -65,12 +71,12 @@ public class StateBuffUIController : MonoBehaviour
 [System.Serializable]
 public class BuffDataUI
 {
-	public BuffType type;
+	public BuffTypeUI type;
 	public Sprite sprite;
 	public string text = "两字Buff名";
 }
 
-public enum BuffType
+public enum BuffTypeUI
 {
 	Stun,
 	Trap,

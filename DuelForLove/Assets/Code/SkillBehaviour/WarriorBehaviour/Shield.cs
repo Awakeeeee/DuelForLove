@@ -12,7 +12,8 @@ public class Shield : SkillBehaviour
 		CommonOnPreCast();
 
 		CommonOnCastSuccessfully();
-		//just dont let this be a buff
+		//if not let this be a buff, I should count and end the effect in this script
+		//if let a continuous effect be a buff, then create buff instance, use buff manager to count and end
 		mc.ChangeMoveSpeed(skillDataInstance.optionalParams[0].value);
 		mc.ChangeKnockResist(skillDataInstance.optionalParams[1].value);
 

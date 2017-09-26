@@ -29,8 +29,10 @@ public class Charge : SkillBehaviour
 			if(cc)
 			{
 				cc.Chp.TakeDamage(skillDataInstance.damage);
-				cc.Cbc.TriggerStun(skillDataInstance.effectDuration);
 				cc.Cmm.TriggerShake();
+
+				DeBuff_Stun stunBuff = new DeBuff_Stun(skillDataInstance.effectDuration, cc);
+				cc.Cbc.AddBuff(stunBuff, BuffTypeUI.Stun);
 			}
 		}
 
