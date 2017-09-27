@@ -18,8 +18,17 @@ public class HeroInfoUI : MonoBehaviour
 	public Text detailSkillDescription;
 	public Text detailSkillOneLineDesc;
 
+	private CanvasGroup self;
+
+	void Awake()
+	{
+		self = GetComponent<CanvasGroup>();
+	}
+
 	void OnEnable()
 	{
+		Hide();
+		
 		skillDetailPanel.alpha = 0f;
 		skillDetailPanel.interactable = false;
 		skillDetailPanel.blocksRaycasts = false;
@@ -71,5 +80,15 @@ public class HeroInfoUI : MonoBehaviour
 	public void HideSkillCardImmediately()
 	{
 		skillDetailPanel.alpha = 0f;
+	}
+
+	public void Hide()
+	{
+		HideSkillCardImmediately();
+		self.alpha = 0f;
+	}
+	public void Show()
+	{
+		self.alpha = 1f;
 	}
 }

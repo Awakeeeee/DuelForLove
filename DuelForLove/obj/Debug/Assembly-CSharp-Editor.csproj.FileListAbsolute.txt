@@ -171,5 +171,3 @@ E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.dll
 E:\GitRepos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.pdb
 E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\JMOAssets.dll
 D:\GitHub Repos\DuelForLove\DuelForLove\Temp\bin\Debug\JMOAssets.dll
-E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Bridge.dll
-E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Messaging.dll

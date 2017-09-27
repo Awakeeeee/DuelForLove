@@ -56,11 +56,11 @@ public class GameManager : PersistentSingletonBase<GameManager>
 	{
 		if(hc.index == 1)
 		{
-			player_1P = hc.currentCard.characterPrefab;
+			player_1P = hc.currentHeroCard.characterPrefab;
 		}
 		else if(hc.index == 2)
 		{
-			player_2P = hc.currentCard.characterPrefab;
+			player_2P = hc.currentHeroCard.characterPrefab;
 		}else
 		{
 			Debug.LogError("Invild character index passed from Hero selection to GameMnager.");

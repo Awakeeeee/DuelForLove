@@ -5,15 +5,16 @@ using UnityEngine;
 public class HeroSelectionController : MonoBehaviour
 {
 	[Tooltip("1 = 1P, 2 = 2P etc.")]
+	public CanvasGroup herosPanel;
 	public int index;
 	public string horizontalAxis;
 	public string verticalAxis;
-	public string checkSkillInfoAxis;
 	public string confirmSelectionAxis;
-	public HeroCard currentCard;
-	public HeroInfoUI infoUI;
+	public HeroCard currentHeroCard;
 	public SkillCard currentSkillCard;
+	public HeroInfoUI infoUI;
 
+	/// Still in the process of deciding hero.
 	public bool selecting;
 	public bool isNavigatingSkillUI;
 
@@ -21,28 +22,13 @@ public class HeroSelectionController : MonoBehaviour
 	{
 		selecting = true;
 		isNavigatingSkillUI = false;
-		currentCard.SelectMe(this);
+		currentHeroCard.SelectMe(this);
 	}
 
 	void Update()
 	{
 		if(!selecting)
 			return;
-
-		if(Input.GetButtonDown(checkSkillInfoAxis))
-		{
-			isNavigatingSkillUI = !isNavigatingSkillUI;
-			if(isNavigatingSkillUI)
-			{
-				currentSkillCard = infoUI.skillCards[0];
-				currentSkillCard.SelectMe();
-			}else
-			{
-				if(currentSkillCard)
-					currentSkillCard.LeaveMe();
-				infoUI.HideSkillCardImmediately();
-			}
-		}
 
 		if(!isNavigatingSkillUI)
 		{
@@ -59,51 +45,65 @@ public class HeroSelectionController : MonoBehaviour
 		//navigating hero cards
 		if(Input.GetButtonDown(horizontalAxis))
 		{
-			currentCard.LeaveMe(this);
+			currentHeroCard.LeaveMe();
 			float dir = Input.GetAxisRaw(horizontalAxis);
 			if(dir > 0)
-				currentCard.right.SelectMe(this);
+				currentHeroCard.right.SelectMe(this);
 			else
-				currentCard.left.SelectMe(this);
+				currentHeroCard.left.SelectMe(this);
+			
+			if(SoundManager.Instance)
+				SoundManager.Instance.PlaySoundUI(0);
 		}
 		else if(Input.GetButtonDown(verticalAxis))
 		{
-			currentCard.LeaveMe(this);
+			currentHeroCard.LeaveMe();
 			float dir = Input.GetAxisRaw(verticalAxis);
 			if(dir > 0)
-				currentCard.up.SelectMe(this);
+				currentHeroCard.up.SelectMe(this);
 			else
-				currentCard.down.SelectMe(this);
+				currentHeroCard.down.SelectMe(this);
+
+			if(SoundManager.Instance)
+				SoundManager.Instance.PlaySoundUI(0);
 		}
 
-		//confirm hero card
+		//go to hero detail
 		if(Input.GetButtonDown(confirmSelectionAxis))
 		{
-			if(currentCard == null)
+			if(currentHeroCard == null)
 				return;
 
-			selecting = false;
-			GameManager.Instance.SetSelectedHero(this);
-			currentCard.ConfirmHero(this);
+			isNavigatingSkillUI = true;	//switch navigation mode
+			herosPanel.alpha = 0f;	//hide this player's hero panel
+			infoUI.Show();	//show selected hero detail info panel
+
+			currentSkillCard = infoUI.skillCards[0] as SkillCard;
+			currentSkillCard.SelectMe(this);	//by default the first skill is selected
 		}
 	}
 
 	void NavigateSkillCards()
 	{
-		if(Input.GetButtonDown(verticalAxis))
+		if(Input.GetButtonDown(horizontalAxis))
+		{
+			currentSkillCard.LeaveMe();
+			float dir = Input.GetAxisRaw(horizontalAxis);
+
+			if(dir > 0)
+				currentSkillCard.right.SelectMe(this);
+			else
+				currentSkillCard.left.SelectMe(this);
+		}
+		else if(Input.GetButtonDown(verticalAxis))
 		{
 			currentSkillCard.LeaveMe();
 			float dir = Input.GetAxisRaw(verticalAxis);
+
 			if(dir > 0)
-			{
-				currentSkillCard = currentSkillCard.up;
-				currentSkillCard.SelectMe();
-			}
+				currentSkillCard.up.SelectMe(this);
 			else
-			{
-				currentSkillCard = currentSkillCard.down;
-				currentSkillCard.SelectMe();	
-			}
+				currentSkillCard.down.SelectMe(this);
 		}
 
 		if(Input.GetButtonDown(confirmSelectionAxis))
@@ -111,7 +111,17 @@ public class HeroSelectionController : MonoBehaviour
 			if(currentSkillCard == null)
 				return;
 			
-			infoUI.ToggleSkillCard();
+			currentSkillCard.OnPressBtn(this);	//maybe trigger decision, or maybe show/hide skill info
 		}
+	}
+
+	public void ConfirmSelection()
+	{
+		selecting = false;
+		GameManager.Instance.SetSelectedHero(this);
+		currentHeroCard.ConfirmHero();
+
+		if(SoundManager.Instance)
+			SoundManager.Instance.PlaySoundUI(1);
 	}
 }

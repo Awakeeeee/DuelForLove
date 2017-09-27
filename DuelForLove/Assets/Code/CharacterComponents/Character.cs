@@ -124,6 +124,14 @@ public class Character : MonoBehaviour
 	{
 		McData.moveSpeed = dataDefault.moveSpeed;
 	}
+	public void ChangeRotateSpeed(float percent)
+	{
+		McData.rotateSpeed *= percent;
+	}
+	public void ResetRotateSpeed()
+	{
+		McData.rotateSpeed = dataDefault.rotateSpeed;
+	}
 
 	public void ChangeKnockResist(float percent)
 	{
