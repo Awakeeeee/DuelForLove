@@ -10,10 +10,9 @@ public class SoundManager : PersistentSingletonBase<SoundManager>
 	public AudioSource source_Global;
 
 	[Header("UI clip")]
-	public AudioClip navigateHeroClip;
+	public AudioClip navigateClip;
 	public AudioClip confirmHeroClip;
-	public AudioClip navigateSkillClip;
-	public AudioClip confirmSkillClip;
+	public AudioClip checkSkillClip;
 
 	/// <summary>
 	/// 0 = navigate hero, 1 = confirm here, 2 = navigate skill, 3 = confirm skill.
@@ -24,16 +23,13 @@ public class SoundManager : PersistentSingletonBase<SoundManager>
 		switch(index)
 		{
 		case 0:
-			clip = navigateHeroClip;
+			clip = navigateClip;
 			break;
 		case 1:
 			clip = confirmHeroClip;
 			break;
 		case 2:
-			clip = navigateSkillClip;
-			break;
-		case 3:
-			clip = confirmSkillClip;
+			clip = checkSkillClip;
 			break;
 		default:
 			break;

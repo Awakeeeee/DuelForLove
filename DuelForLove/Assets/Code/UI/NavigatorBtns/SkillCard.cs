@@ -70,6 +70,8 @@ public class SkillCard : NavigationalButton
 				selector.isNavigatingSkillUI = false;
 				break;
 			case Decision.Confirm:
+				infoUI.Hide();
+				selector.herosPanel.alpha = 1;
 				selector.ConfirmSelection();
 				break;
 			default:

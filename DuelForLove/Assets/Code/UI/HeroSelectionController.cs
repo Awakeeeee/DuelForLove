@@ -80,6 +80,9 @@ public class HeroSelectionController : MonoBehaviour
 
 			currentSkillCard = infoUI.skillCards[0] as SkillCard;
 			currentSkillCard.SelectMe(this);	//by default the first skill is selected
+
+			if(SoundManager.Instance)
+				SoundManager.Instance.PlaySoundUI(1);
 		}
 	}
 
@@ -94,6 +97,9 @@ public class HeroSelectionController : MonoBehaviour
 				currentSkillCard.right.SelectMe(this);
 			else
 				currentSkillCard.left.SelectMe(this);
+
+			if(SoundManager.Instance)
+				SoundManager.Instance.PlaySoundUI(0);
 		}
 		else if(Input.GetButtonDown(verticalAxis))
 		{
@@ -104,6 +110,9 @@ public class HeroSelectionController : MonoBehaviour
 				currentSkillCard.up.SelectMe(this);
 			else
 				currentSkillCard.down.SelectMe(this);
+
+			if(SoundManager.Instance)
+				SoundManager.Instance.PlaySoundUI(0);
 		}
 
 		if(Input.GetButtonDown(confirmSelectionAxis))
@@ -112,6 +121,9 @@ public class HeroSelectionController : MonoBehaviour
 				return;
 			
 			currentSkillCard.OnPressBtn(this);	//maybe trigger decision, or maybe show/hide skill info
+
+			if(SoundManager.Instance)
+				SoundManager.Instance.PlaySoundUI(2);
 		}
 	}
 
