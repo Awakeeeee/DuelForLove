@@ -69,9 +69,6 @@ public class GravitionalCollapse : SkillBehaviour
 			hero.ProgressBar.UpdateBar(1 - castingTimer / skillDataInstance.skillDuration);
 			if(Input.GetButtonUp(mc.skill_4_Axis) || castingTimer > skillDataInstance.skillDuration || mc.Chp.CurrentMP < (skillDataInstance.enegyCost / 10f))
 			{
-				if(castEffectInstance.activeInHierarchy)
-					castEffectInstance.SetActive(false);
-
 				EndCast();
 			}
 		}
@@ -80,6 +77,9 @@ public class GravitionalCollapse : SkillBehaviour
 	protected override void EndCast ()
 	{
 		CommonOnEndCast();
+		if(castEffectInstance.activeInHierarchy)
+			castEffectInstance.SetActive(false);
+
 		hero.ProgressBar.ToggleBar(false);
 		hero.BreakSkillAnim(sIndex);
 		mc.SetMovementPermission(true, true);

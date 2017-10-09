@@ -6,13 +6,14 @@ public class SkillBullet : MonoBehaviour
 {
 	private SkillBehaviour belongSkill;
 	private Character owner;
+	private GameObject hitEffect;
 
 	private float speed;
 	private float damage;
 	private float knockBack;
 
-	public delegate void OptionalEffect(Character target);
-	public OptionalEffect DeleMethod;
+	public delegate void OptionalImpact(Character target);
+	public OptionalImpact DeleMethod;
 
 	void OnEnable()
 	{
@@ -50,24 +51,36 @@ public class SkillBullet : MonoBehaviour
 		}
 
 		//hit other stuff
-		belongSkill.ShowHitEffect(this.transform.position, Quaternion.identity);
+		hitEffect.transform.position = this.transform.position;
+		hitEffect.SetActive(true);
+
 		belongSkill.PlayRandomSkillAudio(belongSkill.skillDataInstance.hitClips);
 		this.gameObject.SetActive(false);
 	}
 
-	public void InitBullet(SkillBehaviour _belongSkill, Character _owner, OptionalEffect optionalEffectMethod = null)
+	public void InitBullet(SkillBehaviour _belongSkill, OptionalImpact optionalEffectMethod = null, GameObject specifiedHitEffect = null)
 	{
 		belongSkill = _belongSkill;
-		owner = _owner;
+		owner = belongSkill.Mc;
 
 		speed = belongSkill.skillDataInstance.bulletSpeed;
 		damage = belongSkill.skillDataInstance.damage;
 		knockBack = belongSkill.skillDataInstance.knockForce;
 
+		//bullet custom hit impact
 		if(optionalEffectMethod != null)
 		{
 			DeleMethod = null;
 			DeleMethod += optionalEffectMethod;	
+		}
+
+		//specified hit effect, by default is the same as skill data hit effect
+		if(specifiedHitEffect != null)
+		{
+			hitEffect = specifiedHitEffect;
+		}else
+		{
+			hitEffect = belongSkill.ShowHitEffect(Vector3.zero, Quaternion.identity, false);
 		}
 	}
 }

@@ -18,10 +18,10 @@ public class ScorpionButcherT : SkillBehaviour {
 	{
 		base.CommonOnCastSuccessfully ();
 
-		GameObject bullet = ShowPathEffect(mc.transform.position + mc.transform.forward * 0.75f, Quaternion.LookRotation(mc.transform.forward)) as GameObject;
+		GameObject bullet = ShowSkillBullet(mc.transform.position + mc.transform.forward * 0.75f, Quaternion.LookRotation(mc.transform.forward)) as GameObject;
 		//Procudurally do these |OR| manually set up the bullet effect prefab
 		sb = bullet.GetComponent<SkillBullet>();
-		sb.InitBullet(this, mc, ToxicArrow);
+		sb.InitBullet(this, ToxicArrow);
 	}
 
 	protected override void Casting ()

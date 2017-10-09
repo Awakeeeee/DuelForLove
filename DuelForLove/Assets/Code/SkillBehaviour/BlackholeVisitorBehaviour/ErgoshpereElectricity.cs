@@ -17,12 +17,15 @@ public class ErgoshpereElectricity : SkillBehaviour
 	{
 		base.CommonOnCastSuccessfully ();
 
-		GameObject bullet = ShowPathEffect(mc.transform.position + mc.transform.forward * 0.75f, Quaternion.LookRotation(mc.transform.forward)) as GameObject;
+		GameObject bullet = ShowSkillBullet(mc.transform.position + mc.transform.forward * 0.75f, Quaternion.LookRotation(mc.transform.forward)) as GameObject;
 		//Procudurally do these |OR| manually set up the bullet effect prefab
 		if(bullet.GetComponent<SkillBullet>() == null)
 		{
 			SkillBullet sb = bullet.AddComponent<SkillBullet>();
-			sb.InitBullet(this, mc);
+			sb.InitBullet(this);
+		}else
+		{
+			bullet.GetComponent<SkillBullet>().InitBullet(this);
 		}
 		if(bullet.GetComponent<SphereCollider>() == null)
 		{

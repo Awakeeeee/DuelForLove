@@ -36,8 +36,9 @@ public class SkillData : ScriptableObject
 
 	[Header("VFX")]
 	public GameObject castEffect;
-	public GameObject pathEffect;
+	public GameObject skillBullet;
 	public GameObject hitEffect;
+	public OptionalEffect[] optionalEffects;	//not pre-load
 
 	[Header("SFX")]
 	public AudioClip[] castClips;
@@ -52,6 +53,14 @@ public class OptionalParam
 	public float value;
 	public string info;
 }
+
+[System.Serializable]
+public class OptionalEffect
+{
+	public GameObject effect;
+	public string info;
+}
+
 [System.Serializable]
 public class OptionalSound
 {

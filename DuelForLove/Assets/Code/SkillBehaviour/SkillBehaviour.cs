@@ -11,6 +11,7 @@ public abstract class SkillBehaviour : MonoBehaviour
 	public int sIndex;
 	public SkillData skillDataDefault;
 	[HideInInspector]public SkillData skillDataInstance;
+	public int initSkillBulletNumber = 5;
 
 	[Header("Process Mornitor")]
 	public float cdTimer;
@@ -18,16 +19,18 @@ public abstract class SkillBehaviour : MonoBehaviour
 
 	//the character/hero this skill belongs to
 	protected Character mc;
+	public Character Mc {get{return mc;}}
 	protected CharacterSkillController hero;
 	protected SkillUIController ui;
 
 	protected GameObject castEffectInstance;
-	protected GameObject[] pathEffectInstance = new GameObject[10];	//TODO the magic number
+	protected GameObject[] skillBulletInstance;
 	protected GameObject hitEffectInstance;
 
 	protected void Awake()
 	{
 		skillDataInstance = Instantiate(skillDataDefault);
+		skillBulletInstance = new GameObject[initSkillBulletNumber];
 
 		triggerCastingUpdate = false;
 		cdTimer = skillDataInstance.cd;
@@ -181,12 +184,12 @@ public abstract class SkillBehaviour : MonoBehaviour
 			castEffectInstance = Instantiate(skillDataInstance.castEffect);
 			castEffectInstance.SetActive(false);
 		}
-		if(skillDataInstance.pathEffect)
+		if(skillDataInstance.skillBullet)
 		{
-			for(int i = 0; i < pathEffectInstance.Length; i++)
+			for(int i = 0; i < skillBulletInstance.Length; i++)
 			{
-				pathEffectInstance[i] = Instantiate(skillDataInstance.pathEffect) as GameObject;
-				pathEffectInstance[i].SetActive(false);
+				skillBulletInstance[i] = Instantiate(skillDataInstance.skillBullet) as GameObject;
+				skillBulletInstance[i].SetActive(false);
 			}
 		}
 		if(skillDataInstance.hitEffect)
@@ -196,40 +199,51 @@ public abstract class SkillBehaviour : MonoBehaviour
 		}
 	}
 
-	public void ShowCastEffect(Vector3 wpos, Quaternion rot)
+	public GameObject ShowCastEffect(Vector3 wpos, Quaternion rot, bool startActivate = true)
 	{
 		if(castEffectInstance)
 		{
 			castEffectInstance.transform.position = wpos;
 			castEffectInstance.transform.rotation = rot;
-			castEffectInstance.SetActive(true);
+			if(startActivate)
+				castEffectInstance.SetActive(true);
+			return castEffectInstance;
+		}else
+		{
+			castEffectInstance = Instantiate(skillDataInstance.castEffect);
+			castEffectInstance.SetActive(false);
 		}
+		return null;
 	}
-	public void ShowHitEffect(Vector3 wpos, Quaternion rot)
+	public GameObject ShowHitEffect(Vector3 wpos, Quaternion rot, bool startActivate = true)
 	{
 		if(hitEffectInstance)
 		{
 			hitEffectInstance.transform.position = wpos;
 			hitEffectInstance.transform.rotation = rot;
-			hitEffectInstance.SetActive(true);
+			if(startActivate)
+				hitEffectInstance.SetActive(true);
+			return hitEffectInstance;
 		}
+		return null;
 	}
-	public GameObject ShowPathEffect(Vector3 wpos, Quaternion rot)
+	public GameObject ShowSkillBullet(Vector3 wpos, Quaternion rot, bool startActivate = true)
 	{
-		for(int i = 0; i < pathEffectInstance.Length; i++)
+		for(int i = 0; i < skillBulletInstance.Length; i++)
 		{
-			if(pathEffectInstance[i] == null)
+			if(skillBulletInstance[i] == null)
 			{
 				Debug.LogWarning("Skill trying to use path effect but no effect is set in skill data.");
 				return null;
 			}
 
-			if(!pathEffectInstance[i].activeInHierarchy)
+			if(!skillBulletInstance[i].activeInHierarchy)
 			{
-				pathEffectInstance[i].transform.position = wpos;
-				pathEffectInstance[i].transform.rotation = rot;
-				pathEffectInstance[i].SetActive(true);
-				return pathEffectInstance[i];
+				skillBulletInstance[i].transform.position = wpos;
+				skillBulletInstance[i].transform.rotation = rot;
+				if(startActivate)
+					skillBulletInstance[i].SetActive(true);
+				return skillBulletInstance[i];
 			}
 		}
 
