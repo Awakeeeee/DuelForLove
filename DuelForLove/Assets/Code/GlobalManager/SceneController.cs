@@ -25,12 +25,20 @@ public class SceneController : PersistentSingletonBase<SceneController>
 		yield return StartCoroutine(ScreenFade(0.0f));
 	}
 
-	//External point
+	//External points
 	public void LoadScene(int sceneID, bool fadeIn = true, bool fadeOut = true)
 	{
 		if(isFading)
 			return;
 		
+		StartCoroutine(LoadSceneProcess(sceneID, fadeIn, fadeOut));
+	}
+	public void ReloadScene(bool fadeIn = true, bool fadeOut = true)
+	{
+		if(isFading)
+			return;
+
+		int sceneID = SceneManager.GetActiveScene().buildIndex;
 		StartCoroutine(LoadSceneProcess(sceneID, fadeIn, fadeOut));
 	}
 

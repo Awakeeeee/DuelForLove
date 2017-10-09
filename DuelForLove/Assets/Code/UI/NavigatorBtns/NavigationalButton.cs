@@ -17,6 +17,8 @@ public class NavigationalButton : MonoBehaviour
 
 	public virtual void SelectMe(HeroSelectionController selector)
 	{}
+	public virtual void SelectMe(MapSelectionController selector)
+	{}
 	public virtual void LeaveMe()
 	{}
 }

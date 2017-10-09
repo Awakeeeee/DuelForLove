@@ -61,7 +61,7 @@ public class CharacterHP : HealthBase
 	}
 	void NaturalRecoverHealth()
 	{
-		if(currentHP >= maxHP || naturalHPRecover <= 0f)
+		if(currentHP >= maxHP || naturalHPRecover <= 0f || currentHP <= 0f)
 			return;
 
 		if(recoverHPCount < 1)
@@ -108,6 +108,17 @@ public class CharacterHP : HealthBase
 
 	void Die()
 	{
+		if(isDead)
+			return;
+
 		Debug.Log(this.gameObject.name + " dies.");
+
+		isDead = true;
+		mc.SetMovementPermission(false, false);
+		mc.SetActionPermission(false);
+
+		//TODO deal with draw situation
+		int winnerIndex = mc.playerSwitch == Character.PlayerSwitch._1P ? 2 : 1;
+		GameManager.Instance.EndRound(winnerIndex);
 	}
 }

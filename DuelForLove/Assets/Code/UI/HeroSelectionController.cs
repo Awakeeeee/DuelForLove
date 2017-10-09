@@ -135,5 +135,23 @@ public class HeroSelectionController : MonoBehaviour
 
 		if(SoundManager.Instance)
 			SoundManager.Instance.PlaySoundUI(1);
+
+		AttempGoMapSelection();
+	}
+
+	void AttempGoMapSelection()
+	{
+		if(GameManager.Instance.player_1P_data == null || GameManager.Instance.player_2P_data == null)
+			return;
+
+		MapSelectionController mapSelection = FindObjectOfType<MapSelectionController>();
+		if(mapSelection)
+		{
+			mapSelection.heroCanvas.SetActive(false);
+			mapSelection.Show();
+		}else
+		{
+			Debug.LogError("No Map Selection panel in scene");
+		}
 	}
 }

@@ -25,6 +25,9 @@ public class HeroCard : NavigationalButton
 
 	public override void SelectMe(HeroSelectionController selector)
 	{
+		if(isSelected)
+			return;
+		
 		frame.gameObject.SetActive(true);
 		isSelected = true;
 		selector.currentHeroCard = this;
@@ -36,6 +39,9 @@ public class HeroCard : NavigationalButton
 
 	public override void LeaveMe()
 	{
+		if(!isSelected)
+			return;
+		
 		frame.gameObject.SetActive(false);
 		isSelected = false;
 	}
