@@ -39,11 +39,6 @@ public abstract class SkillBehaviour : MonoBehaviour
 		PreloadEffects();
 	}
 
-	protected void OnEnable()
-	{
-		currentHasEnoughMana = (mc.Chp.CurrentMP >= skillDataInstance.enegyCost);
-	}
-
 	protected void Update()
 	{
 		GeneralTimerUpdate();
@@ -62,6 +57,8 @@ public abstract class SkillBehaviour : MonoBehaviour
 		mc = characterBelongTo;
 		hero = heroBelongTo;
 		ui = uiBelongTo;
+
+		currentHasEnoughMana = (mc.Chp.CurrentMP >= skillDataInstance.enegyCost);
 	}
 
 	//external link point
