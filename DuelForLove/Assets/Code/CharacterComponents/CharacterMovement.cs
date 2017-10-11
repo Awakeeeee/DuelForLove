@@ -13,9 +13,9 @@ public class CharacterMovement : MonoBehaviour
 
 	[Header("Physics")]
 	public int rayNumber = 8;
+	public float rayLength = 0.1f;
 	public float radius = 0.6f;
 	public LayerMask collideLayer;
-	public float collidingMovementPercent = 0f;
 
 	[Header("Shake")]
 	public Transform shakerTransform;
@@ -27,8 +27,7 @@ public class CharacterMovement : MonoBehaviour
 	private float externalForceAmount;
 	private Vector3 externalForceDir;
 
-	private float intervalAngle;
-	private float collidingMultiplier;
+	private float rayInterval;
 	private Character mc;
 
 	void Awake()
@@ -40,45 +39,19 @@ public class CharacterMovement : MonoBehaviour
 
 	void Start()
 	{
-		intervalAngle = 360f / rayNumber;
-		collidingMultiplier = 1f;
+		rayInterval = (radius * 2f) / rayNumber;
 		forceMove = false;
 	}
 
 	void Update()
 	{
-		CastSurroundingRays();
-
 		Rotate();
 		Move();
 
 		ForcedMovement();
 	}
 
-	/// Collide with other character but not push each other.
-	void CastSurroundingRays()
-	{
-		for(int i = 0; i < rayNumber; i++)
-		{
-			Debug.DrawRay(transform.position, AngleToRayDir(i * intervalAngle) * radius, Color.red);
-			if(Physics.Raycast(transform.position, AngleToRayDir(i * intervalAngle), radius, collideLayer, QueryTriggerInteraction.Ignore))
-			{
-				//stop
-				collidingMultiplier = collidingMovementPercent;
-				//get out of trap state
-				if((!Physics.Raycast(transform.position, transform.forward, radius, collideLayer, QueryTriggerInteraction.Ignore) && Input.GetAxisRaw("Vertical") > 0f)
-					||(!Physics.Raycast(transform.position, -transform.forward, radius, collideLayer, QueryTriggerInteraction.Ignore) && Input.GetAxisRaw("Vertical") < 0f))
-				{
-					collidingMultiplier = 1f;
-				}
-
-				return;
-			}
-		}
-
-		collidingMultiplier = 1f;
-	}
-
+	//OBSOLETE
 	Vector3 AngleToRayDir(float angleInDegree)
 	{
 		return new Vector3(Mathf.Sin(angleInDegree * Mathf.Deg2Rad), 0f, Mathf.Cos(angleInDegree * Mathf.Deg2Rad));
@@ -101,19 +74,41 @@ public class CharacterMovement : MonoBehaviour
 			mc.Csc.SetMoveAnim(false);
 			return;	
 		}
-		
-		float moveAmount = smoothAcceleration ? Input.GetAxis(mc.verticalAxis) : Input.GetAxisRaw(mc.verticalAxis);
-		transform.position += transform.forward * mc.McData.moveSpeed * moveAmount * Time.deltaTime * collidingMultiplier;
 
-		if(Mathf.Abs(moveAmount) > movementStartDeadzone && mc.CurrentState == Character.PlayerState.Idle)
+		float moveAmount = smoothAcceleration ? Input.GetAxis(mc.verticalAxis) : Input.GetAxisRaw(mc.verticalAxis);	//TODO when movement speed smooth down, ray cannot block movement
+		float inputDir = Mathf.Sign(moveAmount);
+
+		//ray test movable
+		bool blocked = false;
+		if(moveAmount != 0f)
 		{
-			mc.TransitState(Character.PlayerState.Moving);
-			mc.Csc.SetMoveAnim(true);
+			for(int i = 0; i < rayNumber; i++)
+			{
+				RaycastHit hit;
+				Vector3 startPos = transform.position - transform.right * (rayNumber / 2) * rayInterval + transform.right * i * rayInterval;
+				Debug.DrawRay(startPos, transform.forward * inputDir * rayLength, Color.red);
+				if(Physics.Raycast(startPos, transform.forward * inputDir, out hit, rayLength * Mathf.Abs(moveAmount), collideLayer, QueryTriggerInteraction.Ignore))
+				{
+					blocked = true;
+					break;
+				}
+			}
 		}
-		else if(Mathf.Abs(moveAmount) < movementStopDeadzone && mc.CurrentState == Character.PlayerState.Moving)
+		//movement if movable
+		if(!blocked)
 		{
-			mc.TransitState(Character.PlayerState.Idle);
-			mc.Csc.SetMoveAnim(false);
+			transform.position += transform.forward * mc.McData.moveSpeed * moveAmount * Time.deltaTime;
+
+			if(Mathf.Abs(moveAmount) > movementStartDeadzone && mc.CurrentState == Character.PlayerState.Idle)
+			{
+				mc.TransitState(Character.PlayerState.Moving);
+				mc.Csc.SetMoveAnim(true);
+			}
+			else if(Mathf.Abs(moveAmount) < movementStopDeadzone && mc.CurrentState == Character.PlayerState.Moving)
+			{
+				mc.TransitState(Character.PlayerState.Idle);
+				mc.Csc.SetMoveAnim(false);
+			}
 		}
 	}
 
@@ -130,7 +125,13 @@ public class CharacterMovement : MonoBehaviour
 			forceMove = false;	//end forced movement
 		}
 
-		transform.position += externalForceAmount * externalForceDir * Time.deltaTime;
+		if(Physics.Raycast(transform.position, externalForceDir, externalForceAmount * Time.deltaTime, collideLayer, QueryTriggerInteraction.Ignore))	//TODO yes character won't go pass block, but it looks inserted in the block tile(transform.position is at center)
+		{
+			forceMove = false;
+		}else
+		{
+			transform.position += externalForceAmount * externalForceDir * Time.deltaTime;
+		}
 	}
 
 	///Trigger forced movement.
@@ -168,3 +169,29 @@ public class CharacterMovement : MonoBehaviour
 		shakeTimer = 0.0f;
 	}
 }
+
+/*
+/// Collide with other character but not push each other.
+void CastSurroundingRays()
+{
+	for(int i = 0; i < rayNumber; i++)
+	{
+		Debug.DrawRay(transform.position, AngleToRayDir(i * intervalAngle) * radius, Color.red);
+		if(Physics.Raycast(transform.position, AngleToRayDir(i * intervalAngle), radius, collideLayer, QueryTriggerInteraction.Ignore))
+		{
+			//stop
+			collidingMultiplier = collidingMovementPercent;
+			//get out of trap state
+			if((!Physics.Raycast(transform.position, transform.forward, radius, collideLayer, QueryTriggerInteraction.Ignore) && Input.GetAxisRaw("Vertical") > 0f)
+				||(!Physics.Raycast(transform.position, -transform.forward, radius, collideLayer, QueryTriggerInteraction.Ignore) && Input.GetAxisRaw("Vertical") < 0f))
+			{
+				collidingMultiplier = 1f;
+			}
+
+			return;
+		}
+	}
+
+	collidingMultiplier = 1f;
+}
+*/

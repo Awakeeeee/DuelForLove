@@ -171,3 +171,5 @@ D:\GitHub Repos\DuelForLove\DuelForLove\Temp\bin\Debug\UnityEditor.iOS.Extension
 D:\GitHub Repos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 D:\GitHub Repos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.dll
 D:\GitHub Repos\DuelForLove\DuelForLove\obj\Debug\Assembly-CSharp-Editor.pdb
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Bridge.dll
+E:\GitRepos\DuelForLove\DuelForLove\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Messaging.dll

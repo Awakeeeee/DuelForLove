@@ -26,4 +26,20 @@ public class SkillUIController : MonoBehaviour
 	
 		skills[skill_index - 1].StartCount();
 	}
+
+	public void NotEnoughMana(int skill_index)
+	{
+		if((skill_index - 1) < 0 || (skill_index - 1) > skills.Length - 1)
+			Debug.LogError("Invalid skill index to array index!");
+
+		skills[skill_index - 1].ManaOut();
+	}
+
+	public void GotEnoughMana(int skill_index)
+	{
+		if((skill_index - 1) < 0 || (skill_index - 1) > skills.Length - 1)
+			Debug.LogError("Invalid skill index to array index!");
+
+		skills[skill_index - 1].ManaReady();
+	}
 }

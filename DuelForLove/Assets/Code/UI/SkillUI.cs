@@ -111,4 +111,13 @@ public class SkillUI : MonoBehaviour
 
 		transform.localScale = Vector3.one;
 	}
+
+	public void ManaOut()
+	{
+		baseImage.color = Color.blue;
+	}
+	public void ManaReady()
+	{
+		baseImage.color = Color.white;
+	}
 }

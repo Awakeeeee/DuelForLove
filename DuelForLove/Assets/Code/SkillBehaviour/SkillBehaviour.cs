@@ -27,6 +27,8 @@ public abstract class SkillBehaviour : MonoBehaviour
 	protected GameObject[] skillBulletInstance;
 	protected GameObject hitEffectInstance;
 
+	protected bool currentHasEnoughMana;
+
 	protected void Awake()
 	{
 		skillDataInstance = Instantiate(skillDataDefault);
@@ -37,9 +39,16 @@ public abstract class SkillBehaviour : MonoBehaviour
 		PreloadEffects();
 	}
 
+	protected void OnEnable()
+	{
+		currentHasEnoughMana = (mc.Chp.CurrentMP >= skillDataInstance.enegyCost);
+	}
+
 	protected void Update()
 	{
 		GeneralTimerUpdate();
+		GeneralManaDetection();
+
 		if(triggerCastingUpdate)
 		{
 			Casting();
@@ -69,6 +78,18 @@ public abstract class SkillBehaviour : MonoBehaviour
 	{
 		if(cdTimer <= skillDataInstance.cd)
 			cdTimer += Time.deltaTime;
+	}
+	protected void GeneralManaDetection()
+	{
+		if((mc.Chp.CurrentMP < skillDataInstance.enegyCost) && currentHasEnoughMana)
+		{
+			currentHasEnoughMana = false;
+			ui.NotEnoughMana(sIndex);
+		}else if((mc.Chp.CurrentMP >= skillDataInstance.enegyCost) && !currentHasEnoughMana)
+		{
+			currentHasEnoughMana = true;
+			ui.GotEnoughMana(sIndex);
+		}
 	}
 
 	protected bool GeneralCastTest()

@@ -34,10 +34,9 @@ public class Map : MonoBehaviour
 				{
 					newTile = Instantiate(wallTile, this.transform);
 					BoxCollider bx = newTile.AddComponent<BoxCollider>();
-					//because the tile is quad, and rotated 90 degress in X axis
-					bx.center = new Vector3(0f, 0f, -1f) * scale;
-					bx.size = new Vector3(1, 1f, 2) * scale;
 					bx.gameObject.layer = LayerMask.NameToLayer("Block");
+					bx.center = new Vector3(0f, 0f, -1f) * scale;	//because the tile is quad, and rotated 90 degress in X axis
+					bx.size = new Vector3(1f, 1f, 2f) * scale;
 				}else
 				{
 					newTile = Instantiate(tile, this.transform);
