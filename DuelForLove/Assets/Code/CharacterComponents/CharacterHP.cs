@@ -121,4 +121,17 @@ public class CharacterHP : HealthBase
 		int winnerIndex = mc.playerSwitch == Character.PlayerSwitch._1P ? 2 : 1;
 		GameManager.Instance.EndRound(winnerIndex);
 	}
+
+	public void RecoverHP(float amount)
+	{
+		currentHP += amount;
+		Mathf.Clamp(currentHP, 0f, maxHP);
+		hpBarUI.UpdateRecoverHP(amount);
+	}
+	public void RecoverMP(float amount)
+	{
+		currentMP += amount;
+		Mathf.Clamp(currentMP, 0f, maxMP);
+		enegyBarUI.UpdateRecoverHP(amount);
+	}
 }

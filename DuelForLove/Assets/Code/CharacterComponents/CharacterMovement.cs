@@ -125,7 +125,7 @@ public class CharacterMovement : MonoBehaviour
 			forceMove = false;	//end forced movement
 		}
 
-		if(Physics.Raycast(transform.position, externalForceDir, externalForceAmount * Time.deltaTime, collideLayer, QueryTriggerInteraction.Ignore))	//TODO yes character won't go pass block, but it looks inserted in the block tile(transform.position is at center)
+		if(Physics.Raycast(transform.position, externalForceDir, 0.65f, collideLayer, QueryTriggerInteraction.Ignore))	//TODO 0.65 is approximately character radius for now
 		{
 			forceMove = false;
 		}else

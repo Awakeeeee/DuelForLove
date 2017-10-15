@@ -38,4 +38,10 @@ public class SoundManager : PersistentSingletonBase<SoundManager>
 		if(clip)
 			source_UI.PlayOneShot(clip);
 	}
+
+	public void PlayGlobalSFX(AudioClip clip, float pitch = 1f, float volumeScale = 1f)
+	{
+		source_Global.pitch = pitch;
+		source_Global.PlayOneShot(clip, volumeScale);
+	}
 }
